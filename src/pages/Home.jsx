@@ -1,5 +1,6 @@
 import "../styles/Home.css";
 import { useAuth } from "../context/useAuth";
+import { useState } from "react";
 
 const whatsappLink =
   "https://wa.me/917995590740?text=Hi%20WebMitra%2C%20I%20want%20to%20create%20a%20website%20for%20my%20business.";
@@ -123,52 +124,86 @@ const faqs = [
 
 const Home = () => {
   const { isAuthenticated, logout, user } = useAuth();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <div className="home-page">
-      <header className="header">
-        <div className="brand-mark">
-          <div className="brand-badge">WM</div>
-          <div>
-            <p className="brand-name">WebMitra</p>
-            <span className="brand-subtitle">
-              Websites for growing local businesses
-            </span>
-          </div>
-        </div>
+     <header className="header">
 
-        <nav className="nav-links">
-          <a href="#pricing">Pricing</a>
-          <a href="#how-it-works">How it works</a>
-          <a href="#/templates">Templates</a>
-          <a href="#faq">FAQ</a>
-        </nav>
+  <div className="brand-mark">
+    <div className="brand-badge">WM</div>
+    <div>
+      <p className="brand-name">WebMitra</p>
+      <span className="brand-subtitle">
+        Websites for growing local businesses
+      </span>
+    </div>
+  </div>
 
-        <div className="header-actions">
-          {isAuthenticated ? (
-            <>
-              <a
-                className="account-pill"
-                href="#/dashboard"
-              >
-                {user?.avatar ? <img src={user.avatar} alt="" /> : null}
-                <span>{user?.name || "My account"}</span>
-                <small>{user?.role}</small>
-              </a>
-              <button className="btn btn-secondary" type="button" onClick={logout}>
-                Sign out
-              </button>
-            </>
-          ) : (
-            <a className="btn btn-secondary" href="#/login">
-              Gmail Login
-            </a>
-          )}
-          <a className="btn btn-primary" href={whatsappLink}>
-            Talk on WhatsApp
-          </a>
-        </div>
-      </header>
+  {/* HAMBURGER */}
+  <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
+    {menuOpen ? "✕" : "☰"}
+  </div>
+
+  {/* DESKTOP NAV */}
+  <nav className="nav-links desktop-only">
+    <a href="#pricing">Pricing</a>
+    <a href="#how-it-works">How it works</a>
+    <a href="#/templates">Templates</a>
+    <a href="#faq">FAQ</a>
+  </nav>
+
+  <div className="header-actions desktop-only">
+    {isAuthenticated ? (
+      <>
+        <a className="account-pill" href="#/dashboard">
+          {user?.avatar ? <img src={user.avatar} alt="" /> : null}
+          <span>{user?.name || "My account"}</span>
+          <small>{user?.role}</small>
+        </a>
+        <button className="btn btn-secondary" onClick={logout}>
+          Sign out
+        </button>
+      </>
+    ) : (
+      <a className="btn btn-secondary" href="#/login">
+        Gmail Login
+      </a>
+    )}
+    <a className="btn btn-primary" href={whatsappLink}>
+      Talk on WhatsApp
+    </a>
+  </div>
+
+  {/* MOBILE MENU */}
+  <div className={`mobile-menu ${menuOpen ? "active" : ""}`}>
+    <a href="#pricing" onClick={() => setMenuOpen(false)}>Pricing</a>
+    <a href="#how-it-works" onClick={() => setMenuOpen(false)}>How it works</a>
+    <a href="#/templates">Templates</a>
+    <a href="#faq" onClick={() => setMenuOpen(false)}>FAQ</a>
+
+    {isAuthenticated ? (
+      <>
+        <a className="account-pill" href="#/dashboard">
+          {user?.avatar ? <img src={user.avatar} alt="" /> : null}
+          <span>{user?.name || "My account"}</span>
+        </a>
+        <button className="btn btn-secondary" onClick={logout}>
+          Sign out
+        </button>
+      </>
+    ) : (
+      <a className="btn btn-secondary" href="#/login">
+        Gmail Login
+      </a>
+    )}
+
+    <a className="btn btn-primary" href={whatsappLink}>
+      Talk on WhatsApp
+    </a>
+  </div>
+
+</header>
 
       <main>
         <section className="hero">
