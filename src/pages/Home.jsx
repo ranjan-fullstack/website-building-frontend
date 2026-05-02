@@ -410,46 +410,64 @@ const Home = () => {
       </main>
 
       <footer className="home-footer">
-        <div className="home-footer-brand">
-          <div className="brand-badge">WM</div>
-          <div>
-            <strong>WebMitra</strong>
-            <p>
-              Affordable websites for Indian local shops, service businesses,
-              clinics, gyms, coaching centres, and showrooms.
-            </p>
-          </div>
-        </div>
 
-        <div className="home-footer-column">
-          <h3>Explore</h3>
-          <a href="#/templates">Templates</a>
-          <a href="#pricing">Pricing</a>
-          <a href="#how-it-works">How it works</a>
-          <a href="#faq">FAQ</a>
-        </div>
+  <div className="home-footer-brand">
+    <div className="brand-badge">WM</div>
+    <div>
+      <strong>WebMitra</strong>
+      <p>
+        Affordable websites for Indian local shops, service businesses,
+        clinics, gyms, coaching centres, and showrooms.
+      </p>
+    </div>
+  </div>
 
-        <div className="home-footer-column">
-          <h3>Contact</h3>
-          <p>Build your business website with WebMitra.</p>
-          <a className="home-footer-whatsapp" href={whatsappLink}>
-            Talk on WhatsApp
-          </a>
-        </div>
+  <div className="home-footer-column">
+    <h3>Explore</h3>
+    <a href="#/templates">Templates</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#how-it-works">How it works</a>
+    <a href="#faq">FAQ</a>
+  </div>
 
-        <div className="home-footer-column">
-          <h3>Follow</h3>
-          <div className="home-social-row">
-            <a href="https://facebook.com" aria-label="Facebook">f</a>
-            <a href="https://instagram.com" aria-label="Instagram">◎</a>
-            <a href="https://twitter.com" aria-label="Twitter">x</a>
-            <a href="https://youtube.com" aria-label="YouTube">▶</a>
-          </div>
-          <p className="home-footer-copy">
-            © 2026 WebMitra. Built for local Indian businesses.
-          </p>
-        </div>
-      </footer>
+  <div className="home-footer-column">
+    <h3>Contact</h3>
+
+    <a href="tel:+917995590740">📞 +91 7995590740</a>
+
+    <p>
+      📧 
+      <a href="mailto:rksahu4455@gmail.com">
+        rksahu4455@gmail.com
+      </a>
+    </p>
+
+    <p>
+      📍 No.305, Block-B,<br />
+      Deccan Prakruti Apartment,<br />
+      Egattur, Chennai, Tamil Nadu ,600130
+    </p>
+
+    <a className="home-footer-whatsapp" href={whatsappLink}>
+      Talk on WhatsApp
+    </a>
+  </div>
+
+  <div className="home-footer-column">
+    <h3>Follow</h3>
+    <div className="home-social-row">
+      <a href="https://facebook.com" aria-label="Facebook">f</a>
+      <a href="https://instagram.com" aria-label="Instagram">◎</a>
+      <a href="https://twitter.com" aria-label="Twitter">x</a>
+      <a href="https://youtube.com" aria-label="YouTube">▶</a>
+    </div>
+
+    <p className="home-footer-copy">
+      © 2026 WebMitra. Built for local Indian businesses.
+    </p>
+  </div>
+
+</footer>
     </div>
   );
 };
