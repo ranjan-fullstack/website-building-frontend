@@ -1,4 +1,10 @@
 {
+  "rewrites": [
+    {
+      "source": "/:path((?!api|assets|sitemap.xml|robots.txt|favicon.ico|favicon.svg|favicon-16x16.png|favicon-32x32.png|apple-touch-icon.png|android-chrome-192x192.png|android-chrome-512x512.png|site.webmanifest|logo.png|google25b4bdd7484c273e.html).*)",
+      "destination": "/index.html"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",

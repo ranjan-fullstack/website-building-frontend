@@ -149,9 +149,10 @@ const Home = () => {
   <nav className="nav-links desktop-only">
     <a href="#pricing">Pricing</a>
     <a href="#how-it-works">How it works</a>
-    <a href="#/templates">Templates</a>
-    <a href="#/about">About</a>
-    <a href="#/contact">Contact</a>
+    <a href="/services">Services</a>
+    <a href="/templates">Templates</a>
+    <a href="/about">About</a>
+    <a href="/contact">Contact</a>
     <a href="#faq">FAQ</a>
   </nav>
 
@@ -168,7 +169,7 @@ const Home = () => {
         </button>
       </>
     ) : (
-      <a className="btn btn-secondary" href="#/login">
+      <a className="btn btn-secondary" href="/login">
         Google Sign-In
       </a>
     )}
@@ -181,9 +182,10 @@ const Home = () => {
   <div className={`mobile-menu ${menuOpen ? "active" : ""}`}>
     <a href="#pricing" onClick={() => setMenuOpen(false)}>Pricing</a>
     <a href="#how-it-works" onClick={() => setMenuOpen(false)}>How it works</a>
-    <a href="#/templates">Templates</a>
-    <a href="#/about" onClick={() => setMenuOpen(false)}>About</a>
-    <a href="#/contact" onClick={() => setMenuOpen(false)}>Contact</a>
+    <a href="/services">Services</a>
+    <a href="/templates">Templates</a>
+    <a href="/about" onClick={() => setMenuOpen(false)}>About</a>
+    <a href="/contact" onClick={() => setMenuOpen(false)}>Contact</a>
     <a href="#faq" onClick={() => setMenuOpen(false)}>FAQ</a>
 
     {isAuthenticated ? (
@@ -197,7 +199,7 @@ const Home = () => {
         </button>
       </>
     ) : (
-      <a className="btn btn-secondary" href="#/login">
+      <a className="btn btn-secondary" href="/login">
         Google Sign-In
       </a>
     )}
@@ -428,7 +430,7 @@ const Home = () => {
 
   <div className="home-footer-column">
     <h3>Explore</h3>
-    <a href="#/templates">Templates</a>
+    <a href="/templates">Templates</a>
     <a href="#pricing">Pricing</a>
     <a href="#how-it-works">How it works</a>
     <a href="#faq">FAQ</a>
@@ -436,10 +438,12 @@ const Home = () => {
 
   <div className="home-footer-column">
     <h3>Company</h3>
-    <a href="#/about">About</a>
-    <a href="#/contact">Contact</a>
-    <a href="#/privacy">Privacy Policy</a>
-    <a href="#/login">Google Sign-In</a>
+    <a href="/about">About</a>
+    <a href="/contact">Contact</a>
+    <a href="/services">Services</a>
+    <a href="/privacy-policy">Privacy Policy</a>
+    <a href="/terms-and-conditions">Terms and Conditions</a>
+    <a href="/login">Google Sign-In</a>
   </div>
 
   <div className="home-footer-column">
@@ -467,9 +471,10 @@ const Home = () => {
 
   <div className="home-footer-column">
     <h3>Trust</h3>
-    <a href="#/privacy">Privacy Policy</a>
-    <a href="#/about">About WebMitra</a>
-    <a href="#/contact">Official contact</a>
+    <a href="/privacy-policy">Privacy Policy</a>
+    <a href="/terms-and-conditions">Terms and Conditions</a>
+    <a href="/about">About WebMitra</a>
+    <a href="/contact">Official contact</a>
     <div className="home-social-row">
       <a href="https://facebook.com" aria-label="Facebook">f</a>
       <a href="https://instagram.com" aria-label="Instagram">◎</a>

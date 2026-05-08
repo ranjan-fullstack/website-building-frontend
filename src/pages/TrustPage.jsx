@@ -4,6 +4,29 @@ const whatsappLink =
   "https://wa.me/917995590740?text=Hi%20WebMitra%2C%20I%20need%20help%20with%20my%20website.";
 
 const pageContent = {
+  services: {
+    kicker: "WebMitra Services",
+    title: "Website services for local business growth",
+    intro:
+      "WebMitra provides practical website setup, template customization, WhatsApp enquiry flows, basic SEO, and support for Indian small businesses.",
+    sections: [
+      {
+        title: "Website setup",
+        text:
+          "We help businesses choose a layout, organize content, add contact details, and prepare a professional website for launch.",
+      },
+      {
+        title: "SEO and trust basics",
+        text:
+          "We add important search basics such as page metadata, favicon support, sitemap, robots.txt, business contact details, and privacy information.",
+      },
+      {
+        title: "Support and updates",
+        text:
+          "Customers can request changes, track project progress, and contact WebMitra support through official phone, email, and WhatsApp channels.",
+      },
+    ],
+  },
   about: {
     kicker: "About WebMitra",
     title: "Affordable websites for Indian local businesses",
@@ -78,6 +101,34 @@ const pageContent = {
       },
     ],
   },
+  terms: {
+    kicker: "Terms and Conditions",
+    title: "Terms for using WebMitra services",
+    intro:
+      "These terms explain the basic conditions for using WebMitra's website, templates, account features, and support services.",
+    sections: [
+      {
+        title: "Use of services",
+        text:
+          "WebMitra services are intended for legitimate business website creation, project tracking, enquiries, and customer support.",
+      },
+      {
+        title: "Customer responsibilities",
+        text:
+          "Customers should provide accurate business information, own or have permission to use submitted content, and avoid sharing sensitive credentials through forms or messages.",
+      },
+      {
+        title: "Payments and delivery",
+        text:
+          "Project scope, pricing, delivery timelines, and support details are confirmed with the customer before paid work begins.",
+      },
+      {
+        title: "Account security",
+        text:
+          "WebMitra uses Google Sign-In for account access and never asks users to enter Google passwords on WebMitra pages.",
+      },
+    ],
+  },
 };
 
 const TrustPage = ({ type = "about" }) => {
@@ -86,7 +137,7 @@ const TrustPage = ({ type = "about" }) => {
   return (
     <div className="trust-page">
       <header className="trust-header">
-        <a className="brand-mark" href="#/">
+        <a className="brand-mark" href="/">
           <div className="brand-badge">WM</div>
           <div>
             <p className="brand-name">WebMitra</p>
@@ -94,10 +145,12 @@ const TrustPage = ({ type = "about" }) => {
           </div>
         </a>
         <nav className="trust-nav" aria-label="Company pages">
-          <a href="#/about">About</a>
-          <a href="#/contact">Contact</a>
-          <a href="#/privacy">Privacy</a>
-          <a href="#/login">Sign in</a>
+          <a href="/about">About</a>
+          <a href="/contact">Contact</a>
+          <a href="/services">Services</a>
+          <a href="/privacy-policy">Privacy</a>
+          <a href="/terms-and-conditions">Terms</a>
+          <a href="/login">Sign in</a>
         </nav>
       </header>
 
