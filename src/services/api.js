@@ -1,18 +1,16 @@
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  (import.meta.env.DEV ? "http://localhost:5000/api" : "/api");
 
 export const apiRequest = async (path, options = {}) => {
-  const token = window.localStorage.getItem("webmitra_auth_token");
   const headers = {
     "Content-Type": "application/json",
     ...(options.headers || {}),
   };
 
-  if (token) {
-    headers.Authorization = `Bearer ${token}`;
-  }
-
   const response = await fetch(`${API_URL}${path}`, {
     ...options,
+    credentials: "include",
     headers,
   });
 

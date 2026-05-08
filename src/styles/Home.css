@@ -1998,7 +1998,7 @@ button {
 
 @media (min-width: 860px) {
   .home-footer {
-    grid-template-columns: 1.35fr 0.7fr 0.95fr 0.75fr;
+    grid-template-columns: 1.35fr 0.65fr 0.7fr 0.95fr 0.75fr;
   }
 }
 

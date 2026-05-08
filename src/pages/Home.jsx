@@ -150,6 +150,8 @@ const Home = () => {
     <a href="#pricing">Pricing</a>
     <a href="#how-it-works">How it works</a>
     <a href="#/templates">Templates</a>
+    <a href="#/about">About</a>
+    <a href="#/contact">Contact</a>
     <a href="#faq">FAQ</a>
   </nav>
 
@@ -167,7 +169,7 @@ const Home = () => {
       </>
     ) : (
       <a className="btn btn-secondary" href="#/login">
-        Gmail Login
+        Google Sign-In
       </a>
     )}
     <a className="btn btn-primary" href={whatsappLink}>
@@ -180,6 +182,8 @@ const Home = () => {
     <a href="#pricing" onClick={() => setMenuOpen(false)}>Pricing</a>
     <a href="#how-it-works" onClick={() => setMenuOpen(false)}>How it works</a>
     <a href="#/templates">Templates</a>
+    <a href="#/about" onClick={() => setMenuOpen(false)}>About</a>
+    <a href="#/contact" onClick={() => setMenuOpen(false)}>Contact</a>
     <a href="#faq" onClick={() => setMenuOpen(false)}>FAQ</a>
 
     {isAuthenticated ? (
@@ -194,7 +198,7 @@ const Home = () => {
       </>
     ) : (
       <a className="btn btn-secondary" href="#/login">
-        Gmail Login
+        Google Sign-In
       </a>
     )}
 
@@ -431,6 +435,14 @@ const Home = () => {
   </div>
 
   <div className="home-footer-column">
+    <h3>Company</h3>
+    <a href="#/about">About</a>
+    <a href="#/contact">Contact</a>
+    <a href="#/privacy">Privacy Policy</a>
+    <a href="#/login">Google Sign-In</a>
+  </div>
+
+  <div className="home-footer-column">
     <h3>Contact</h3>
 
     <a href="tel:+917995590740">📞 +91 7995590740</a>
@@ -454,7 +466,10 @@ const Home = () => {
   </div>
 
   <div className="home-footer-column">
-    <h3>Follow</h3>
+    <h3>Trust</h3>
+    <a href="#/privacy">Privacy Policy</a>
+    <a href="#/about">About WebMitra</a>
+    <a href="#/contact">Official contact</a>
     <div className="home-social-row">
       <a href="https://facebook.com" aria-label="Facebook">f</a>
       <a href="https://instagram.com" aria-label="Instagram">◎</a>

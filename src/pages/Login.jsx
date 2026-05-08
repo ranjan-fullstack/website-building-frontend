@@ -129,31 +129,30 @@ const Login = () => {
         <div className="auth-grid">
           <div className="auth-copy">
             <p className="auth-kicker">WebMitra account</p>
-            <h1>Continue with your Gmail and start building faster</h1>
+            <h1>Continue with Google and start building faster</h1>
             <p>
-              Google sign-in keeps onboarding simple for business owners. Later,
-              we can connect this login to saved websites, payments, and support
-              history.
+              WebMitra uses the official Google Sign-In button. We receive only
+              your verified profile details, never your Google password.
             </p>
             <div className="auth-proof-row">
-              <span>Secure Google login</span>
+              <span>Official Google Sign-In</span>
               <span>Project tracking</span>
-              <span>Plan management</span>
+              <span>HTTPS protected</span>
             </div>
           </div>
 
           <div className="auth-panel">
             <div className="auth-panel-top">
               <div className="auth-logo">WM</div>
-              <span className="auth-secure-pill">Protected sign in</span>
+              <span className="auth-secure-pill">Secure sign in</span>
             </div>
             <h2>Sign in to WebMitra</h2>
-            <p>Use the Google account where you want project updates.</p>
+            <p>Use your own Google account for project updates and support.</p>
 
             {!clientId ? (
               <div className="auth-warning">
-                Add <strong>VITE_GOOGLE_CLIENT_ID</strong> to your frontend env file
-                to enable Google login.
+                Google Sign-In is temporarily unavailable. Please contact
+                WebMitra support for account help.
               </div>
             ) : isAuthenticated ? (
               <div className="auth-user-card">
@@ -174,26 +173,29 @@ const Login = () => {
                 </button>
               </div>
             ) : (
-              <div className="auth-login-form">
+              <form className="auth-login-form" onSubmit={(event) => event.preventDefault()}>
                 <label className="auth-field">
-                  Email address
+                  Google account email
                   <input
                     type="email"
                     value={email}
                     placeholder="you@gmail.com"
-                    autoComplete="email"
+                    autoComplete="username"
+                    inputMode="email"
+                    name="username"
                     onChange={(event) => setEmail(event.target.value)}
                   />
                 </label>
                 <p className="auth-helper">
-                  Enter your Gmail, then continue with Google to verify it.
+                  Optional: enter your Google account email to prefill the official
+                  Google Sign-In prompt.
                 </p>
                 <div className="google-button-wrap" ref={googleButtonRef} />
                 <p className="auth-small-print">
-                  We never see your Gmail password. Google verifies your account
-                  and WebMitra stores only your profile details.
+                  Do not enter your Google password on WebMitra. Authentication
+                  happens only through Google&apos;s secure sign-in window.
                 </p>
-              </div>
+              </form>
             )}
 
             {message ? <p className="auth-message">{message}</p> : null}

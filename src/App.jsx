@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import TemplateBuilder from "./pages/TemplateBuilder";
 import TemplatePreview from "./pages/TemplatePreview";
 import TrackOrder from "./pages/TrackOrder";
+import TrustPage from "./pages/TrustPage";
 
 
 const getRoute = () => window.location.hash || window.location.pathname || "#";
@@ -32,6 +33,10 @@ function App() {
   const renderPage = () => {
     if (parts[0] === "login") {
       return <Login />;
+    }
+
+    if (["about", "contact", "privacy"].includes(parts[0])) {
+      return <TrustPage type={parts[0]} />;
     }
 
     if (parts[0] === "dashboard" || parts[0] === "admin") {

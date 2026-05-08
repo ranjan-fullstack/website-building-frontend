@@ -17,7 +17,7 @@ const imageUrl = (query, width = 1200, height = 850) => {
     0
   );
 
-  return `https://loremflickr.com/${width}/${height}/${keywords}?lock=${lock}`;
+  return `/logo.png?template=${lock}&w=${width}&h=${height}`;
 };
 
 const templateSites = {
@@ -682,11 +682,11 @@ const TemplatePreview = ({
             <form className="template-contact-form">
               <label>
                 Your name
-                <input type="text" placeholder="Enter your name" />
+                <input type="text" placeholder="Enter your name" autoComplete="name" />
               </label>
               <label>
                 Phone number
-                <input type="tel" placeholder="+91 98765 43210" />
+                <input type="tel" placeholder="+91 98765 43210" autoComplete="tel" />
               </label>
               <label>
                 What do you need?
