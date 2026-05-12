@@ -35,6 +35,8 @@ button {
 
 .home-page {
   min-height: 100vh;
+  color: #14213d;
+  color-scheme: light;
 }
 
 .header,
@@ -365,6 +367,7 @@ button {
 .faq h2,
 .cta h2 {
   margin: 16px 0 0;
+  color: #14213d;
   font-size: clamp(2rem, 4vw, 3rem);
   line-height: 1.08;
 }
