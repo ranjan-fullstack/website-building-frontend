@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { AuthProvider } from "./context/authProvider";
+import ClientSite from "./pages/ClientSite";
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -141,6 +142,10 @@ function App() {
 
     if (parts[0] === "track" && parts[1]) {
       return <TrackOrder hash={hash} />;
+    }
+
+    if (parts[0] === "c" && parts[1]) {
+      return <ClientSite hash={hash} />;
     }
 
     if (parts[0] === "templates" && parts[1]) {

@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "../context/useAuth";
 import { apiRequest } from "../services/api";
+import AdminClientsModule from "./admin/AdminClientsModule";
 import AdminDashboardHome from "./admin/AdminDashboardHome";
 import LeadsModule from "./admin/LeadsModule";
 import PaymentsModule from "./admin/PaymentsModule";
 import WebsitesModule from "./admin/WebsitesModule";
+import MySubmissionsModule from "./client/MySubmissionsModule";
 import TemplateBuilder from "./TemplateBuilder";
 import TemplatePreview from "./TemplatePreview";
 import "../styles/Dashboard.css";
@@ -91,6 +93,10 @@ const getDashboardTabFromHash = (hash, isAdmin = false) => {
       return "websites";
     }
 
+    if (route.startsWith("/dashboard/clients") || route.startsWith("/admin/clients")) {
+      return "clients";
+    }
+
     return "admin-dashboard";
   }
 
@@ -100,6 +106,10 @@ const getDashboardTabFromHash = (hash, isAdmin = false) => {
 
   if (route.startsWith("/dashboard/subscription")) {
     return "subscription";
+  }
+
+  if (route.startsWith("/dashboard/submissions")) {
+    return "submissions";
   }
 
   if (route.startsWith("/dashboard/users") || route.startsWith("/admin/users")) {
@@ -164,6 +174,11 @@ const Dashboard = ({ hash = "#/dashboard" }) => {
           label: "Websites",
           href: "#/dashboard/websites",
         },
+        {
+          id: "clients",
+          label: "Clients",
+          href: "#/dashboard/clients",
+        },
       ];
     }
 
@@ -175,8 +190,17 @@ const Dashboard = ({ hash = "#/dashboard" }) => {
         href: "#/dashboard/subscription",
       },
       { id: "templates", label: "Choose templates", href: "#/dashboard/templates" },
+      ...(user?.tenantId
+        ? [
+            {
+              id: "submissions",
+              label: "My Submissions",
+              href: "#/dashboard/submissions",
+            },
+          ]
+        : []),
     ];
-  }, [isAdmin]);
+  }, [isAdmin, user?.tenantId]);
 
   useEffect(() => {
     if (activeTab !== "users" || user?.role !== "admin") {
@@ -496,6 +520,10 @@ const Dashboard = ({ hash = "#/dashboard" }) => {
           <WebsitesModule />
         ) : null}
 
+        {activeTab === "clients" && user.role === "admin" ? (
+          <AdminClientsModule />
+        ) : null}
+
         {activeTab === "track" ? (
           <div className="dashboard-panel">
             <div className="dashboard-heading">
@@ -673,6 +701,8 @@ const Dashboard = ({ hash = "#/dashboard" }) => {
             )}
           </div>
         ) : null}
+
+        {activeTab === "submissions" && user.tenantId ? <MySubmissionsModule /> : null}
 
         {activeTab === "users" && user.role === "admin" ? (
           <div className="dashboard-panel">
