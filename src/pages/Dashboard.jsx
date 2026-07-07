@@ -6,7 +6,7 @@ import AdminDashboardHome from "./admin/AdminDashboardHome";
 import LeadsModule from "./admin/LeadsModule";
 import PaymentsModule from "./admin/PaymentsModule";
 import WebsitesModule from "./admin/WebsitesModule";
-import MySubmissionsModule from "./client/MySubmissionsModule";
+import ClientDashboard from "./ClientDashboard";
 import TemplateBuilder from "./TemplateBuilder";
 import TemplatePreview from "./TemplatePreview";
 import "../styles/Dashboard.css";
@@ -108,10 +108,6 @@ const getDashboardTabFromHash = (hash, isAdmin = false) => {
     return "subscription";
   }
 
-  if (route.startsWith("/dashboard/submissions")) {
-    return "submissions";
-  }
-
   if (route.startsWith("/dashboard/users") || route.startsWith("/admin/users")) {
     return "users";
   }
@@ -119,7 +115,7 @@ const getDashboardTabFromHash = (hash, isAdmin = false) => {
   return "track";
 };
 
-const Dashboard = ({ hash = "#/dashboard" }) => {
+const RegularDashboard = ({ hash = "#/dashboard" }) => {
   const { isAuthenticated, logout, user } = useAuth();
   const [adminData, setAdminData] = useState(null);
   const [adminError, setAdminError] = useState("");
@@ -190,17 +186,8 @@ const Dashboard = ({ hash = "#/dashboard" }) => {
         href: "#/dashboard/subscription",
       },
       { id: "templates", label: "Choose templates", href: "#/dashboard/templates" },
-      ...(user?.tenantId
-        ? [
-            {
-              id: "submissions",
-              label: "My Submissions",
-              href: "#/dashboard/submissions",
-            },
-          ]
-        : []),
     ];
-  }, [isAdmin, user?.tenantId]);
+  }, [isAdmin]);
 
   useEffect(() => {
     if (activeTab !== "users" || user?.role !== "admin") {
@@ -702,8 +689,6 @@ const Dashboard = ({ hash = "#/dashboard" }) => {
           </div>
         ) : null}
 
-        {activeTab === "submissions" && user.tenantId ? <MySubmissionsModule /> : null}
-
         {activeTab === "users" && user.role === "admin" ? (
           <div className="dashboard-panel">
             <div className="dashboard-heading">
@@ -1095,6 +1080,16 @@ const Dashboard = ({ hash = "#/dashboard" }) => {
       </section>
     </main>
   );
+};
+
+const Dashboard = ({ hash = "#/dashboard" }) => {
+  const { isAuthenticated, user } = useAuth();
+
+  if (isAuthenticated && user?.role !== "admin" && user?.tenantId) {
+    return <ClientDashboard hash={hash} />;
+  }
+
+  return <RegularDashboard hash={hash} />;
 };
 
 export default Dashboard;
