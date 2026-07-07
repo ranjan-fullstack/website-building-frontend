@@ -42,12 +42,53 @@ const getWhatsAppHref = (siteName) => {
   return `https://wa.me/917995590740?text=${message}`;
 };
 
-const Login = () => {
+const getFromSlug = (hash) => {
+  const queryString = (hash || "").split("?")[1] || "";
+  return new URLSearchParams(queryString).get("from") || "";
+};
+
+const getInitials = (name) =>
+  name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word[0].toUpperCase())
+    .join("");
+
+const Login = ({ hash }) => {
   const googleButtonRef = useRef(null);
   const { isAuthenticated, loginWithGoogleCredential, logout, user } = useAuth();
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [clientBranding, setClientBranding] = useState(null);
   const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
+  useEffect(() => {
+    const slug = getFromSlug(hash);
+
+    if (!slug) {
+      setClientBranding(null);
+      return;
+    }
+
+    let isCancelled = false;
+
+    apiRequest(`/public/${slug}`)
+      .then((data) => {
+        if (!isCancelled && data?.name) {
+          setClientBranding({ name: data.name, initials: getInitials(data.name) });
+        }
+      })
+      .catch(() => {
+        if (!isCancelled) {
+          setClientBranding(null);
+        }
+      });
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [hash]);
 
   useEffect(() => {
     if (!clientId || !googleButtonRef.current) {
@@ -128,7 +169,9 @@ const Login = () => {
 
         <div className="auth-grid">
           <div className="auth-copy">
-            <p className="auth-kicker">WebMitra account</p>
+            <p className="auth-kicker">
+              {clientBranding ? `${clientBranding.name} account` : "WebMitra account"}
+            </p>
             <h1>Continue with Google and start building faster</h1>
             <p>
               WebMitra uses the official Google Sign-In button. We receive only
@@ -143,10 +186,10 @@ const Login = () => {
 
           <div className="auth-panel">
             <div className="auth-panel-top">
-              <div className="auth-logo">WM</div>
+              <div className="auth-logo">{clientBranding ? clientBranding.initials : "WM"}</div>
               <span className="auth-secure-pill">Secure sign in</span>
             </div>
-            <h2>Sign in to WebMitra</h2>
+            <h2>{clientBranding ? `Sign in to ${clientBranding.name}` : "Sign in to WebMitra"}</h2>
             <p>Use your own Google account for project updates and support.</p>
 
             {!clientId ? (

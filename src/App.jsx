@@ -113,7 +113,8 @@ function App() {
   }, []);
 
   const cleanedHash = hash.replace(/^#?\/?/, "");
-  const parts = cleanedHash.split("/");
+  const [pathOnlyHash] = cleanedHash.split("?");
+  const parts = pathOnlyHash.split("/");
   const route = parts[0] || "";
 
   useEffect(() => {
@@ -124,7 +125,7 @@ function App() {
 
   const renderPage = () => {
     if (parts[0] === "login") {
-      return <Login />;
+      return <Login hash={hash} />;
     }
 
     if (["about", "contact", "services", "privacy", "privacy-policy", "terms", "terms-and-conditions"].includes(parts[0])) {

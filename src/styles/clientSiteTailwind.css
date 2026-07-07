@@ -1,0 +1,17 @@
+/*
+  Scoped Tailwind entry for the client-site pages (e.g. ClientSite.jsx) only.
+  Intentionally omits the "preflight" layer so it does not reset base element
+  styles across the rest of the app, which relies on hand-written CSS files.
+*/
+@import "tailwindcss/theme" layer(theme);
+@import "tailwindcss/utilities" layer(utilities);
+
+@theme {
+  --color-primary: #0b6e4f;
+  --color-primary-dark: #084d38;
+  --color-gold: #f4b400;
+  --color-cta: #ff6b00;
+  --color-cta-dark: #e05a00;
+  --color-dark: #0f172a;
+  --font-poppins: "Poppins", ui-sans-serif, system-ui, sans-serif;
+}
