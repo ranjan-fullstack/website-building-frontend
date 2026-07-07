@@ -52,6 +52,7 @@ const TAB_CONFIG = {
 const ClientDashboard = () => {
   const { logout, user } = useAuth();
   const [clientName, setClientName] = useState(user?.clientName || "");
+  const [clientSlug, setClientSlug] = useState(user?.clientSlug || "");
   const [activeType, setActiveType] = useState("inquiry");
   const [submissions, setSubmissions] = useState([]);
   const [error, setError] = useState("");
@@ -61,6 +62,7 @@ const ClientDashboard = () => {
     apiRequest("/auth/me")
       .then(({ user: freshUser }) => {
         setClientName(freshUser.clientName || "");
+        setClientSlug(freshUser.clientSlug || "");
         window.localStorage.setItem("webmitra_google_user", JSON.stringify(freshUser));
       })
       .catch(() => {});
@@ -77,7 +79,7 @@ const ClientDashboard = () => {
 
   const handleLogout = () => {
     logout();
-    window.location.hash = "#/login";
+    window.location.hash = clientSlug ? `#/c/${clientSlug}` : "#/";
   };
 
   const updateStatus = async (submissionId, status) => {
