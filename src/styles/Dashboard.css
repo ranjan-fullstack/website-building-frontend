@@ -160,6 +160,29 @@
   padding: clamp(22px, 4vw, 48px);
 }
 
+.client-dashboard-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.client-dashboard-tabs button {
+  border: 1px solid rgba(20, 33, 61, 0.12);
+  border-radius: 999px;
+  padding: 10px 18px;
+  color: #14213d;
+  background: #f8fbff;
+  font: inherit;
+  font-weight: 800;
+}
+
+.client-dashboard-tabs button.active {
+  color: #ffffff;
+  background: #0b4f55;
+  border-color: transparent;
+}
+
 .dashboard-template-panel {
   overflow: hidden;
   border: 1px solid rgba(20, 33, 61, 0.08);
@@ -554,6 +577,7 @@
 }
 
 .user-table select,
+.status-select,
 .project-admin-form input,
 .project-admin-form textarea,
 .order-admin-actions input,
