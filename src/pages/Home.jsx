@@ -85,7 +85,7 @@ const pricingTableRows = [
   ["Basic templates", "Yes", "Yes", "Yes", "Yes"],
   ["Subdomain", "Yes", "Yes", "Yes", "Yes"],
   ["Your branding visible", "Yes", "No", "No", "No"],
-  ["Custom domain", "No", "Yes", "Yes", "Yes"],
+  ["Custom domain", "No", "No", "Yes", "Yes"],
   ["Number of pages", "3", "5", "15", "25 or more"],
   ["WhatsApp button", "Yes", "Yes", "Yes", "Yes"],
   ["Contact form", "Yes", "Yes", "Yes", "Yes"],
