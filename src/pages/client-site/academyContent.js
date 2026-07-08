@@ -111,7 +111,7 @@ export const academy = {
       popular: false,
     },
   ],
-  phone: "+91 86035 24731",
+  phone: "+91 91559 69543",
   whatsapp: "+91 91559 69543",
   email: "risexacademy07@gmail.com",
   address: "Patna, Bihar",
