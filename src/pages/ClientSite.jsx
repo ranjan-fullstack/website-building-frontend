@@ -4,12 +4,15 @@ import "../styles/clientSiteTailwind.css";
 import { academy } from "./client-site/academyContent";
 import AcademyDetails from "./client-site/AcademyDetails";
 import AdmissionForm from "./client-site/AdmissionForm";
+import Facilities from "./client-site/Facilities";
 import Footer from "./client-site/Footer";
 import Hero from "./client-site/Hero";
 import InquiryContact from "./client-site/InquiryContact";
-import ProgramsFees from "./client-site/ProgramsFees";
+import Services from "./client-site/Services";
 import SiteNav from "./client-site/SiteNav";
+import TrainingPrograms from "./client-site/TrainingPrograms";
 import Unavailable from "./client-site/Unavailable";
+import WhatsAppFloat from "./client-site/WhatsAppFloat";
 
 const emptyInquiry = { name: "", phone: "", message: "" };
 const emptyAdmission = { studentName: "", phone: "", age: "", batchPreference: "" };
@@ -112,7 +115,7 @@ const ClientSite = ({ hash }) => {
     return (
       <Unavailable
         clientName={clientName}
-        initials={academy.initials}
+        logo={academy.logo}
         pageState={pageState}
         statusError={statusError}
       />
@@ -121,10 +124,18 @@ const ClientSite = ({ hash }) => {
 
   return (
     <div className="font-poppins bg-white">
-      <SiteNav clientName={clientName} initials={academy.initials} phone={academy.phone} slug={slug} />
+      <SiteNav
+        clientName={clientName}
+        logo={academy.logo}
+        phone={academy.phone}
+        whatsapp={academy.whatsapp}
+        slug={slug}
+      />
       <Hero academy={academy} />
       <AcademyDetails academy={academy} />
-      <ProgramsFees academy={academy} />
+      <TrainingPrograms academy={academy} />
+      <Services academy={academy} />
+      <Facilities academy={academy} />
       <AdmissionForm
         academy={academy}
         draft={admissionDraft}
@@ -145,7 +156,8 @@ const ClientSite = ({ hash }) => {
         error={inquiryError}
         onReset={() => setInquirySuccess(false)}
       />
-      <Footer clientName={clientName} initials={academy.initials} />
+      <Footer clientName={clientName} logo={academy.logo} />
+      <WhatsAppFloat academy={academy} />
     </div>
   );
 };

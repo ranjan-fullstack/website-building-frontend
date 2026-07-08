@@ -45,6 +45,21 @@ const InquiryContact = ({ academy, draft, onChange, onSubmit, submitting, succes
             <div className="flex items-start gap-3">
               <span className="mt-0.5 grid h-9 w-9 flex-none place-items-center rounded-full bg-white/15">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M4 4h16v16H4z" />
+                  <path d="M4 6l8 7 8-7" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </span>
+              <div>
+                <strong className="block">Email</strong>
+                <a href={`mailto:${academy.email}`} className="text-white/80 hover:text-white">
+                  {academy.email}
+                </a>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3">
+              <span className="mt-0.5 grid h-9 w-9 flex-none place-items-center rounded-full bg-white/15">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M12 21s7-6.1 7-11a7 7 0 0 0-14 0c0 4.9 7 11 7 11z" />
                   <circle cx="12" cy="10" r="2.5" />
                 </svg>

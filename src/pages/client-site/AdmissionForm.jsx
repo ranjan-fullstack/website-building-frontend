@@ -16,7 +16,10 @@ const AdmissionForm = ({ academy, draft, onChange, onSubmit, submitting, success
           <p className="mx-auto w-fit rounded-full bg-white/15 px-4 py-2 text-sm font-semibold text-white">
             Admission
           </p>
-          <h2 className="mt-4 text-3xl font-extrabold text-white sm:text-4xl">
+          <p className="mt-4 text-sm font-extrabold tracking-wide text-gold uppercase">
+            {academy.ctaTagline}
+          </p>
+          <h2 className="mt-2 text-3xl font-extrabold text-white sm:text-4xl">
             Start Your Cricket Journey
           </h2>
           <p className="mx-auto mt-3 max-w-xl text-primary-dark/90 text-white/80">

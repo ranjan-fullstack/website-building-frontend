@@ -1,22 +1,23 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { useAuth } from "../../context/useAuth";
-import { scrollToSection, telHref } from "./utils";
+import { scrollToSection, telHref, whatsappHref } from "./utils";
 
 const navLinks = [
   ["About", "about"],
-  ["Programs & Fees", "programs-fees"],
+  ["Services", "services"],
   ["Admission", "admission"],
   ["Contact", "contact"],
 ];
 
-const SiteNav = ({ clientName, initials, phone, slug }) => {
+const SiteNav = ({ clientName, logo, phone, whatsapp, slug }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { isAuthenticated } = useAuth();
   const accountHref = isAuthenticated
     ? "#/dashboard/submissions"
     : `#/login${slug ? `?from=${slug}` : ""}`;
   const accountLabel = isAuthenticated ? "Dashboard" : "Academy Login";
+  const enquireHref = whatsappHref(whatsapp, `Hi ${clientName}, I'd like to know more.`);
 
   const handleNavClick = (sectionId) => (event) => {
     setMobileOpen(false);
@@ -25,16 +26,18 @@ const SiteNav = ({ clientName, initials, phone, slug }) => {
 
   return (
     <header className="font-poppins sticky top-0 z-40 border-b border-white/10 bg-dark backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-4">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-4">
         <a
           href="#home"
           onClick={handleNavClick("home")}
-          className="flex min-w-0 items-center gap-3"
+          className="flex min-w-0 flex-1 items-center gap-3"
         >
-          <span className="grid h-11 w-11 flex-none place-items-center rounded-full bg-gold font-extrabold text-dark">
-            {initials}
-          </span>
-          <span className="truncate text-lg font-bold text-white">{clientName}</span>
+          <img
+            src={logo}
+            alt={clientName}
+            className="h-11 w-11 flex-none rounded-full object-cover"
+          />
+          <span className="truncate text-sm font-bold text-white sm:text-base">{clientName}</span>
         </a>
 
         <nav className="hidden items-center gap-1 md:flex">
@@ -43,7 +46,7 @@ const SiteNav = ({ clientName, initials, phone, slug }) => {
               key={id}
               href={`#${id}`}
               onClick={handleNavClick(id)}
-              className="rounded-full px-4 py-2 text-sm font-semibold text-white! transition hover:bg-white/10"
+              className="rounded-full px-3 py-2 text-sm font-semibold text-white! transition hover:bg-white/10"
             >
               {label}
             </a>
@@ -58,8 +61,9 @@ const SiteNav = ({ clientName, initials, phone, slug }) => {
             {accountLabel}
           </a>
           <a
-            href="#admission"
-            onClick={handleNavClick("admission")}
+            href={enquireHref}
+            target="_blank"
+            rel="noopener noreferrer"
             className="rounded-full bg-cta px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-cta/30 transition hover:bg-cta-dark"
           >
             Enquire Now
@@ -106,8 +110,9 @@ const SiteNav = ({ clientName, initials, phone, slug }) => {
                 </a>
               ))}
               <a
-                href="#admission"
-                onClick={handleNavClick("admission")}
+                href={enquireHref}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="mt-2 rounded-full bg-cta px-5 py-3 text-center text-sm font-bold text-white"
               >
                 Enquire Now

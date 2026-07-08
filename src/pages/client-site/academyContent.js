@@ -1,12 +1,45 @@
+import risexLogo from "../../assets/risex_logo.jpeg";
+
 export const academy = {
-  name: "Cricket Academy",
-  initials: "CA",
-  tagline: "Where Champions Are Made",
-  heroHeadline: "Build Your Game With Structured Cricket Coaching",
+  name: "RiseX Cricket Academy",
+  logo: risexLogo,
+  tagline: "Fortune Favours The Brave",
+  heroHeadline: "Building Skills. Shaping Discipline. Raising Champions.",
   heroSubtext:
-    "From first-timers to state-level trials, Cricket Academy gives every player a clear path forward with real technique, real match practice, and a coach who pays attention.",
-  coachBio:
-    "Led by a state-level coach with over 12 years of playing and coaching experience, Cricket Academy focuses on batting technique, bowling action, fielding drills, and match awareness for every batch.",
+    "At RiseX, we don't just train players, we build complete cricketers. With the right coaching, modern facilities and a winning mindset, we prepare you to rise above and achieve your dreams.",
+  ctaTagline: "Dream It. Train For It. Achieve It.",
+  about:
+    "RiseX Cricket Academy is a school-based cricket training academy dedicated to discovering and developing young cricket talent. We partner with schools to provide professional cricket coaching, skill development, fitness training, and regular tournaments within the school environment. Our mission is to make quality cricket coaching accessible to every student and help talented players progress to district, state, and national-level opportunities while building discipline, confidence, teamwork, and sportsmanship.",
+  services: [
+    ["🏫", "School Cricket Coaching Programs"],
+    ["🏏", "In-School Cricket Training Sessions"],
+    ["🎯", "Cricket Trial Camps"],
+    ["📈", "Skill Development (Batting, Bowling & Fielding)"],
+    ["💪", "Fitness & Strength Conditioning"],
+    ["🧤", "Wicketkeeping Training"],
+    ["🧠", "Match Strategy & Game Awareness"],
+    ["🏆", "Inter-School Cricket Tournaments"],
+    ["🌟", "Talent Identification & Performance Assessment"],
+    ["🎓", "District & State Trial Preparation"],
+    ["📊", "Student Progress Reports"],
+    ["☀️", "Summer & Winter Cricket Camps"],
+    ["👨‍🏫", "Coach Mentorship & Career Guidance"],
+    ["🤝", "School Cricket Program Management"],
+  ],
+  trainingPrograms: [
+    ["🏏", "Batting", "Technique, footwork, shot selection & match awareness."],
+    ["⚡", "Bowling", "Speed, accuracy, line & length, variations."],
+    ["🧤", "Wicketkeeping", "Gloves work, reflexes, footwork & game understanding."],
+    ["🤾", "Fielding", "Catching, ground fielding, agility, strength & quick reflexes."],
+    ["🧠", "Mental Toughness", "Focus, confidence, decision making & leadership."],
+  ],
+  whoCanJoin: ["Boys & Girls", "Age 6 Years & Above", "Beginners to Advanced Players"],
+  facilities: [
+    ["🏟️", "Turf & Net Practice", "High quality practice pitches & professional nets."],
+    ["💪", "Fitness & Strength Training", "Improve your stamina, agility & overall performance."],
+    ["🎥", "Video Analysis", "Match performance reviews & expert feedback."],
+    ["🏆", "Match Exposure", "Regular matches, tournaments & leagues."],
+  ],
   badges: ["Certified Coach", "All Age Groups", "Since 2018", "Trial Session Available"],
   stats: [
     ["6+", "Years Running"],
@@ -16,24 +49,29 @@ export const academy = {
   ],
   whyChooseUs: [
     [
-      "trophy",
-      "Proven Results",
-      "Players from our academy have gone on to district and club-level selections.",
+      "award",
+      "Experienced & Certified Coaches",
+      "Every session is led by qualified, certified cricket coaches.",
     ],
     [
       "target",
-      "Focused Coaching",
-      "Small batch sizes so every player gets real feedback, not just group drills.",
+      "Personalized Training Programs",
+      "Training plans built around each player's skill level and goals.",
     ],
     [
-      "clock",
-      "Flexible Batches",
-      "Morning, school-hours, and weekend batches to fit around study and work.",
+      "activity",
+      "Focus on Skill + Fitness + Mindset",
+      "A complete program covering technique, fitness, and the mental game.",
     ],
     [
-      "users",
-      "All Skill Levels",
-      "Structured programs from absolute beginners to competitive players.",
+      "shield",
+      "Safe, Positive & Motivational Environment",
+      "A supportive space where every player can learn and grow with confidence.",
+    ],
+    [
+      "trending",
+      "Pathway to District, State & Professional Cricket",
+      "A clear progression path toward district, state, and professional-level cricket.",
     ],
   ],
   programs: [
@@ -75,7 +113,9 @@ export const academy = {
       popular: false,
     },
   ],
-  phone: "+91 98765 12340",
-  address: "Cricket Academy Ground, Near Municipal Stadium, Cuttack, Odisha 753001",
+  phone: "+91 86035 24731",
+  whatsapp: "+91 91559 69543",
+  email: "risexacademy07@gmail.com",
+  address: "Patna, Bihar",
   timings: "Mon - Sun: 5:30 AM - 9:00 AM | Evening batches on request",
 };

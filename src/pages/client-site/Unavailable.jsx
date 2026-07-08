@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-const Unavailable = ({ clientName, initials, pageState, statusError }) => {
+const Unavailable = ({ clientName, logo, pageState, statusError }) => {
   return (
     <div className="font-poppins flex min-h-screen items-center justify-center bg-dark px-5 text-center">
       <motion.div
@@ -9,9 +9,11 @@ const Unavailable = ({ clientName, initials, pageState, statusError }) => {
         transition={{ duration: 0.4 }}
         className="max-w-md"
       >
-        <span className="mx-auto mb-6 grid h-16 w-16 place-items-center rounded-full bg-gold font-extrabold text-dark">
-          {initials}
-        </span>
+        <img
+          src={logo}
+          alt={clientName}
+          className="mx-auto mb-6 h-16 w-16 rounded-full object-cover"
+        />
         <h1 className="text-2xl font-bold text-white">{clientName}</h1>
         <p className="mt-4 text-slate-300">
           {pageState === "paused"

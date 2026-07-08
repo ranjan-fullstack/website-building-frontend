@@ -7,3 +7,9 @@ export const scrollToSection = (sectionId) => (event) => {
 };
 
 export const telHref = (phone) => `tel:${phone.replace(/\s/g, "")}`;
+
+export const whatsappHref = (phone, message) => {
+  const digits = phone.replace(/[^\d]/g, "");
+  const text = message ? `?text=${encodeURIComponent(message)}` : "";
+  return `https://wa.me/${digits}${text}`;
+};

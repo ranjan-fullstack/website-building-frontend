@@ -1,8 +1,11 @@
 import { motion } from "framer-motion";
 
 const icons = {
-  trophy: (
-    <path d="M8 21h8M12 17v4M7 4h10v3a5 5 0 0 1-10 0V4zM7 5H4v1a4 4 0 0 0 4 4M17 5h3v1a4 4 0 0 1-4 4" />
+  award: (
+    <>
+      <circle cx="12" cy="8" r="6" />
+      <path d="M8.2 13.9 7 23l5-3 5 3-1.2-9.1" strokeLinecap="round" strokeLinejoin="round" />
+    </>
   ),
   target: (
     <>
@@ -11,18 +14,20 @@ const icons = {
       <circle cx="12" cy="12" r="0.5" />
     </>
   ),
-  clock: (
-    <>
-      <circle cx="12" cy="12" r="9" />
-      <path d="M12 7v5l3 3" strokeLinecap="round" />
-    </>
+  activity: (
+    <path d="M22 12h-4l-3 9L9 3l-3 9H2" strokeLinecap="round" strokeLinejoin="round" />
   ),
-  users: (
+  shield: (
+    <path
+      d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6l8-4z"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  ),
+  trending: (
     <>
-      <circle cx="9" cy="8" r="3" />
-      <path d="M2 20c0-3.3 3.1-6 7-6s7 2.7 7 6" />
-      <circle cx="17" cy="9" r="2.4" />
-      <path d="M16 14c2.8.4 5 2.5 5 5.4" />
+      <path d="M23 6l-9.5 9.5-5-5L1 18" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M17 6h6v6" strokeLinecap="round" strokeLinejoin="round" />
     </>
   ),
 };
@@ -64,7 +69,7 @@ const AcademyDetails = ({ academy }) => {
             <h2 className="mt-4 text-3xl font-extrabold text-dark sm:text-4xl">
               A coaching program built around real progress
             </h2>
-            <p className="mt-4 text-slate-600">{academy.coachBio}</p>
+            <p className="mt-4 text-slate-600">{academy.about}</p>
           </motion.div>
 
           <motion.div
@@ -97,7 +102,7 @@ const AcademyDetails = ({ academy }) => {
             Why choose us
           </p>
           <h2 className="mt-4 text-3xl font-extrabold text-dark sm:text-4xl">
-            What makes our coaching different
+            Why Choose RiseX?
           </h2>
 
           <motion.div
@@ -108,7 +113,7 @@ const AcademyDetails = ({ academy }) => {
               hidden: {},
               visible: { transition: { staggerChildren: 0.08 } },
             }}
-            className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4"
+            className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-5"
           >
             {academy.whyChooseUs.map(([icon, title, text]) => (
               <motion.article
