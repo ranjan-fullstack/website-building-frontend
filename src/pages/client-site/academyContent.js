@@ -42,8 +42,6 @@ export const academy = {
   ],
   badges: ["Certified Coach", "All Age Groups", "Since 2018", "Trial Session Available"],
   stats: [
-    ["6+", "Years Running"],
-    ["500+", "Students Trained"],
     ["4", "Active Batches"],
     ["12+", "Years Coaching Experience"],
   ],
