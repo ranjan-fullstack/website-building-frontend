@@ -1,4 +1,10 @@
 import { motion } from "framer-motion";
+import ac1 from "../../assets/ac1.jpeg";
+import ac2 from "../../assets/ac2.jpeg";
+import ac3 from "../../assets/ac3.jpeg";
+import ac4 from "../../assets/ac4.jpeg";
+
+const albumImages = [ac1, ac2, ac3, ac4];
 
 const icons = {
   award: (
@@ -96,6 +102,34 @@ const AcademyDetails = ({ academy }) => {
             ))}
           </motion.div>
         </div>
+
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={{
+            hidden: {},
+            visible: { transition: { staggerChildren: 0.08 } },
+          }}
+          className="mt-16 grid grid-cols-2 gap-4 lg:grid-cols-4"
+        >
+          {albumImages.map((image, index) => (
+            <motion.div
+              key={image}
+              variants={cardVariants}
+              whileHover={{ scale: 1.03 }}
+              transition={{ duration: 0.3 }}
+              className="aspect-square overflow-hidden rounded-2xl shadow-md shadow-slate-200/60"
+            >
+              <img
+                src={image}
+                alt={`${academy.name} training moment ${index + 1}`}
+                loading="lazy"
+                className="h-full w-full object-cover"
+              />
+            </motion.div>
+          ))}
+        </motion.div>
 
         <div className="mt-16">
           <p className="w-fit rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">
