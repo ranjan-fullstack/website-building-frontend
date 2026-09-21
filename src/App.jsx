@@ -1,65 +1,74 @@
-import { useEffect, useState } from "react";
-import "./App.css";
+import { MotionConfig } from "framer-motion";
+import { Suspense, lazy, useEffect, useState } from "react";
+import "./styles/ui.css";
+import { SkeletonPage } from "./components/ui/Skeleton";
 import { AuthProvider } from "./context/authProvider";
-import ClientSite from "./pages/ClientSite";
-import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
-import Login from "./pages/Login";
-import TemplateBuilder from "./pages/TemplateBuilder";
-import TemplatePreview from "./pages/TemplatePreview";
-import TrackOrder from "./pages/TrackOrder";
-import TrustPage from "./pages/TrustPage";
+
+// Everything except the home page is code-split so first load stays small.
+const ClientSite = lazy(() => import("./pages/ClientSite"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const Login = lazy(() => import("./pages/Login"));
+const TemplateBuilder = lazy(() => import("./pages/TemplateBuilder"));
+const TemplatePreview = lazy(() => import("./pages/TemplatePreview"));
+const TrackOrder = lazy(() => import("./pages/TrackOrder"));
+const TrustPage = lazy(() => import("./pages/TrustPage"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+
+// In-page anchors on the home page (e.g. "#pricing") are not separate routes.
+const homeAnchors = ["", "pricing", "how-it-works", "faq", "main-content"];
+const privateRoutes = ["login", "dashboard", "admin", "track"];
 
 
 const getRoute = () => window.location.hash || window.location.pathname || "#";
 
 const routeMeta = {
   "": {
-    title: "WebMitra - Build Your Business Website",
+    title: "Appzet Web Solution - Build Your Business Website",
     description:
-      "WebMitra builds affordable websites for Indian local businesses with Google Sign-In, WhatsApp enquiries, project tracking, and support.",
+      "Appzet Web Solution builds affordable websites for Indian local businesses with WhatsApp enquiries, project tracking, and support.",
     path: "/",
   },
   about: {
-    title: "About WebMitra - Affordable Websites for Local Businesses",
+    title: "About Appzet Web Solution - Affordable Websites for Local Businesses",
     description:
-      "Learn about WebMitra, an affordable website service for Indian local businesses.",
+      "Learn about Appzet Web Solution, an affordable website service for Indian local businesses.",
     path: "/about",
   },
   contact: {
-    title: "Contact WebMitra - Website Support and Enquiries",
+    title: "Contact Appzet Web Solution - Website Support and Enquiries",
     description:
-      "Contact WebMitra for website setup, support, billing questions, and project help.",
+      "Contact Appzet Web Solution for website setup, support, billing questions, and project help.",
     path: "/contact",
   },
   services: {
-    title: "WebMitra Services - Website Setup, SEO Basics, and Support",
+    title: "Appzet Web Solution Services - Website Setup, SEO Basics, and Support",
     description:
-      "Explore WebMitra website setup, template customization, WhatsApp enquiry, SEO, and support services.",
+      "Explore Appzet Web Solution website setup, template customization, WhatsApp enquiry, SEO, and support services.",
     path: "/services",
   },
   login: {
-    title: "WebMitra Login - Secure Google Sign-In",
+    title: "Appzet Web Solution Login - Secure Account Access",
     description:
-      "Sign in to WebMitra with the official Google Sign-In flow to manage website projects.",
+      "Sign in to Appzet Web Solution to manage your website projects and track progress.",
     path: "/login",
   },
   "privacy-policy": {
-    title: "Privacy Policy - WebMitra",
+    title: "Privacy Policy - Appzet Web Solution",
     description:
-      "Read how WebMitra handles account, enquiry, and project information.",
+      "Read how Appzet Web Solution handles account, enquiry, and project information.",
     path: "/privacy-policy",
   },
   "terms-and-conditions": {
-    title: "Terms and Conditions - WebMitra",
+    title: "Terms and Conditions - Appzet Web Solution",
     description:
-      "Read the terms for using WebMitra website services, templates, and account features.",
+      "Read the terms for using Appzet Web Solution website services, templates, and account features.",
     path: "/terms-and-conditions",
   },
   templates: {
-    title: "Website Templates - WebMitra",
+    title: "Website Templates - Appzet Web Solution",
     description:
-      "Browse WebMitra website templates for Indian local shops, clinics, gyms, coaching centres, and services.",
+      "Browse Appzet Web Solution website templates for Indian local shops, clinics, gyms, coaching centres, and services.",
     path: "/templates",
   },
 };
@@ -75,22 +84,27 @@ const updateMeta = (route, parts) => {
   const meta =
     templateSlug
       ? {
-          title: `WebMitra ${templateSlug
+          title: `Appzet Web Solution ${templateSlug
             .split("-")
             .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
             .join(" ")} Template`,
           description:
-            "Preview this WebMitra website template for Indian local businesses.",
+            "Preview this Appzet Web Solution website template for Indian local businesses.",
           path: `/templates/${templateSlug}`,
         }
       : routeMeta[canonicalRoute] || routeMeta[""];
   const canonicalUrl = `https://webmitra.online${meta.path}`;
+  const robotsTag = document.querySelector('meta[name="robots"]');
   const descriptionTag = document.querySelector('meta[name="description"]');
   const canonicalTag = document.querySelector('link[rel="canonical"]');
   const ogUrlTag = document.querySelector('meta[property="og:url"]');
   const ogTitleTag = document.querySelector('meta[property="og:title"]');
   const ogDescriptionTag = document.querySelector('meta[property="og:description"]');
 
+  robotsTag?.setAttribute(
+    "content",
+    privateRoutes.includes(route) ? "noindex, nofollow" : "index, follow"
+  );
   document.title = meta.title;
   descriptionTag?.setAttribute("content", meta.description);
   canonicalTag?.setAttribute("href", canonicalUrl);
@@ -157,10 +171,31 @@ function App() {
       return <TemplateBuilder hash={hash} />;
     }
 
+    const isUnknownPath =
+      !window.location.hash && window.location.pathname !== "/" && !homeAnchors.includes(route);
+
+    if (isUnknownPath) {
+      return <NotFound />;
+    }
+
     return <Home />;
   };
 
-  return <AuthProvider>{renderPage()}</AuthProvider>;
+  return (
+    <MotionConfig reducedMotion="user">
+      <AuthProvider>
+        <Suspense
+          fallback={
+            <div className="wm-container" style={{ paddingBlock: 48 }}>
+              <SkeletonPage />
+            </div>
+          }
+        >
+          {renderPage()}
+        </Suspense>
+      </AuthProvider>
+    </MotionConfig>
+  );
 }
 
 export default App;

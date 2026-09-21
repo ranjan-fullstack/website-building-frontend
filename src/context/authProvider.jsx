@@ -17,17 +17,36 @@ const getStoredSession = () => {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => getStoredSession());
 
-  const loginWithGoogleCredential = useCallback(async (credential) => {
-    const { token, user: nextUser } = await apiRequest("/auth/google", {
-      method: "POST",
-      body: JSON.stringify({ credential }),
-    });
-
+  const startSession = useCallback((token, nextUser) => {
     setAuthToken(token);
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(nextUser));
     setUser(nextUser);
     return nextUser;
   }, []);
+
+  const login = useCallback(
+    async (email, password) => {
+      const { token, user: nextUser } = await apiRequest("/auth/login", {
+        method: "POST",
+        body: JSON.stringify({ email, password }),
+      });
+
+      return startSession(token, nextUser);
+    },
+    [startSession]
+  );
+
+  const register = useCallback(
+    async (name, email, password) => {
+      const { token, user: nextUser } = await apiRequest("/auth/register", {
+        method: "POST",
+        body: JSON.stringify({ name, email, password }),
+      });
+
+      return startSession(token, nextUser);
+    },
+    [startSession]
+  );
 
   const logout = useCallback(async () => {
     await apiRequest("/auth/logout", { method: "POST" }).catch(() => {});
@@ -40,10 +59,11 @@ export const AuthProvider = ({ children }) => {
     () => ({
       user,
       isAuthenticated: Boolean(user),
-      loginWithGoogleCredential,
+      login,
+      register,
       logout,
     }),
-    [loginWithGoogleCredential, logout, user]
+    [login, register, logout, user]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -1,44 +1,63 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import ErrorState from "../../components/ui/ErrorState";
+import { SkeletonDashboard } from "../../components/ui/Skeleton";
 import { apiRequest } from "../../services/api";
+import { PanelHeading } from "../dashboard/DashboardLayout";
 
+// Only metrics the backend really provides (GET /admin/business/stats).
 const statCards = [
-  ["totalOrders", "Total orders"],
-  ["inProgress", "In progress"],
-  ["completed", "Completed"],
-  ["pendingPayments", "Pending payments"],
+  ["totalOrders", "Total orders", "blue", "Confirmed orders in the pipeline"],
+  ["inProgress", "In progress", "purple", "Being designed or reviewed"],
+  ["completed", "Completed", "green", "Website live or delivered"],
+  ["pendingPayments", "Pending payments", "red", "Need follow-up"],
 ];
 
 const AdminDashboardHome = () => {
   const [stats, setStats] = useState(null);
-  const [error, setError] = useState("");
+  const [failed, setFailed] = useState(false);
 
-  useEffect(() => {
+  const load = useCallback(() => {
     apiRequest("/admin/business/stats")
       .then((data) => {
-        setError("");
+        setFailed(false);
         setStats(data.stats);
       })
-      .catch((requestError) => setError(requestError.message));
+      .catch(() => setFailed(true));
   }, []);
 
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  const retry = () => {
+    setFailed(false);
+    load();
+  };
+
   return (
-    <div className="dashboard-panel">
-      <div className="dashboard-heading">
-        <p className="dashboard-kicker">Business overview</p>
-        <h1>Admin dashboard</h1>
-        <p>Track orders, delivery progress, and payment follow-ups in one place.</p>
-      </div>
+    <div className="wm-panel">
+      <PanelHeading
+        kicker="Business overview"
+        title="Admin dashboard"
+        text="Track orders, delivery progress and payment follow-ups in one place."
+      />
 
-      {error ? <p className="dashboard-error">{error}</p> : null}
+      {failed ? (
+        <ErrorState title="Something went wrong" text="We could not load the business overview." onRetry={retry} />
+      ) : null}
+      {!stats && !failed ? <SkeletonDashboard /> : null}
 
-      <div className="admin-metrics">
-        {statCards.map(([key, label]) => (
-          <article key={key}>
-            <strong>{stats ? stats[key] : "-"}</strong>
-            <span>{label}</span>
-          </article>
-        ))}
-      </div>
+      {stats ? (
+        <div className="wm-stat-grid">
+          {statCards.map(([key, label, tone, hint]) => (
+            <article className={`wm-card wm-kpi wm-kpi-${tone}`} key={key}>
+              <span>{label}</span>
+              <strong>{stats[key]}</strong>
+              <small>{hint}</small>
+            </article>
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 };

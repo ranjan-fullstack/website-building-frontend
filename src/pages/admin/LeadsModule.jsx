@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
+import EmptyState from "../../components/ui/EmptyState";
+import { SkeletonTable } from "../../components/ui/Skeleton";
+import StatusBadge from "../../components/ui/StatusBadge";
 import { apiRequest } from "../../services/api";
+import { PanelHeading } from "../dashboard/DashboardLayout";
 
 const emptyLead = { name: "", phone: "", template: "", status: "New" };
 
@@ -9,6 +13,7 @@ const LeadsModule = () => {
   const [draft, setDraft] = useState(emptyLead);
   const [savingId, setSavingId] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const loadLeads = () =>
     apiRequest("/admin/business/leads").then((data) => {
@@ -17,7 +22,7 @@ const LeadsModule = () => {
     });
 
   useEffect(() => {
-    loadLeads().catch((requestError) => setError(requestError.message));
+    loadLeads().catch((requestError) => setError(requestError.message)).finally(() => setLoading(false));
   }, []);
 
   const updateDraft = (field, value) => {
@@ -58,35 +63,36 @@ const LeadsModule = () => {
   };
 
   return (
-    <div className="dashboard-panel">
-      <div className="dashboard-heading">
-        <p className="dashboard-kicker">Lead pipeline</p>
-        <h1>Leads</h1>
-        <p>Create, review, and convert customer enquiries into website orders.</p>
-      </div>
+    <div className="wm-panel">
+      <PanelHeading kicker="Lead pipeline" title="Leads" text="Create, review, and convert customer enquiries into website orders." />
 
-      {error ? <p className="dashboard-error">{error}</p> : null}
+      {error ? <p className="wm-alert wm-alert-error" role="alert">{error}</p> : null}
 
       <form className="business-inline-form" onSubmit={createLead}>
-        <input
-          type="text"
+        <div className="wm-field">
+<label htmlFor="lead-f1">Client name</label>
+<input id="lead-f1" className="wm-input" type="text"
           placeholder="Client name"
           value={draft.name}
-          onChange={(event) => updateDraft("name", event.target.value)}
-        />
-        <input
-          type="tel"
+          onChange={(event) => updateDraft("name", event.target.value)} />
+</div>
+        <div className="wm-field">
+<label htmlFor="lead-f2">Phone</label>
+<input id="lead-f2" className="wm-input" type="tel"
           placeholder="Phone"
           value={draft.phone}
-          onChange={(event) => updateDraft("phone", event.target.value)}
-        />
-        <input
-          type="text"
+          onChange={(event) => updateDraft("phone", event.target.value)} />
+</div>
+        <div className="wm-field">
+<label htmlFor="lead-f3">Template</label>
+<input id="lead-f3" className="wm-input" type="text"
           placeholder="Template"
           value={draft.template}
-          onChange={(event) => updateDraft("template", event.target.value)}
-        />
-        <select
+          onChange={(event) => updateDraft("template", event.target.value)} />
+</div>
+        <div className="wm-field">
+<label htmlFor="lead-f4">Status</label>
+<select id="lead-f4" className="wm-select"
           value={draft.status}
           onChange={(event) => updateDraft("status", event.target.value)}
         >
@@ -96,12 +102,14 @@ const LeadsModule = () => {
             </option>
           ))}
         </select>
-        <button type="submit" disabled={savingId === "new"}>
+</div>
+        <button className="wm-btn wm-btn-primary" type="submit" disabled={savingId === "new"}>
           {savingId === "new" ? "Saving..." : "Add lead"}
         </button>
       </form>
 
-      <div className="admin-table-wrap">
+      {loading ? <SkeletonTable rows={4} /> : null}
+      <div className="admin-table-wrap" hidden={loading}>
         <table className="admin-table">
           <thead>
             <tr>
@@ -119,11 +127,12 @@ const LeadsModule = () => {
                 <td data-label="Phone">{lead.phone}</td>
                 <td data-label="Template">{lead.template}</td>
                 <td data-label="Status">
-                  <span className="table-pill">{lead.status}</span>
+                  <StatusBadge status={lead.status} />
                 </td>
                 <td data-label="Action">
                   <button
-                    type="button"
+ className="wm-btn wm-btn-secondary wm-btn-sm"
+ type="button"
                     disabled={lead.status === "Converted" || savingId === lead.id}
                     onClick={() => convertLead(lead.id)}
                   >
@@ -134,7 +143,9 @@ const LeadsModule = () => {
             ))}
             {!leads.length ? (
               <tr>
-                <td colSpan="5">No leads yet.</td>
+                <td colSpan="5">
+<EmptyState title="No leads yet" text="Add your first lead using the form above." />
+</td>
               </tr>
             ) : null}
           </tbody>

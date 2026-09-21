@@ -29,16 +29,33 @@ export const apiRequest = async (path, options = {}) => {
     ...(options.headers || {}),
   };
 
-  const response = await fetch(`${API_URL}${path}`, {
-    ...options,
-    credentials: "include",
-    headers,
-  });
+  let response;
+
+  try {
+    response = await fetch(`${API_URL}${path}`, {
+      ...options,
+      credentials: "include",
+      headers,
+    });
+  } catch {
+    const networkError = new Error(
+      "We could not reach the server. Please check your internet connection and try again."
+    );
+    networkError.status = 0;
+    throw networkError;
+  }
 
   const data = await response.json().catch(() => ({}));
 
   if (!response.ok) {
-    throw new Error(data.message || "API request failed");
+    // Show backend messages for expected 4xx problems; never leak server internals for 5xx.
+    const message =
+      response.status >= 500
+        ? "Something went wrong on our side. Please try again in a moment."
+        : data.message || "We could not complete that request.";
+    const requestError = new Error(message);
+    requestError.status = response.status;
+    throw requestError;
   }
 
   return data;

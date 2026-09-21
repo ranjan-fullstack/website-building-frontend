@@ -1,153 +1,122 @@
-import { useEffect, useMemo, useState } from "react";
-import { apiRequest } from "../services/api";
+import { useCallback, useEffect, useState } from "react";
+import "../styles/ui.css";
+import "../styles/Marketing.css";
 import "../styles/TrackOrder.css";
-
-const fallbackStatuses = [
-  "New Lead",
-  "Contacted",
-  "Requirements Collected",
-  "Design Started",
-  "Design Ready",
-  "Client Review",
-  "Changes Requested",
-  "Finalizing",
-  "Website Live",
-  "Delivered",
-];
-
-const formatDateTime = (value) => {
-  if (!value) {
-    return "";
-  }
-
-  return new Intl.DateTimeFormat("en-IN", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(new Date(value));
-};
+import EmptyState from "../components/ui/EmptyState";
+import ErrorState from "../components/ui/ErrorState";
+import { SkeletonPage } from "../components/ui/Skeleton";
+import SiteFooter from "../components/ui/SiteFooter";
+import SiteHeader from "../components/ui/SiteHeader";
+import StatusBadge from "../components/ui/StatusBadge";
+import { apiRequest } from "../services/api";
+import { orderStatusOptions } from "./dashboard/constants";
+import OrderProgress from "./dashboard/OrderProgress";
+import ProjectTimeline from "./dashboard/ProjectTimeline";
 
 const TrackOrder = ({ hash }) => {
-  const orderId = hash.replace(/^#?\/?track\/?/, "");
+  const orderId = hash.replace(/^#?\/?track\/?/, "").split("?")[0];
   const [order, setOrder] = useState(null);
-  const [statuses, setStatuses] = useState(fallbackStatuses);
-  const [error, setError] = useState("");
+  const [statuses, setStatuses] = useState(orderStatusOptions);
+  const [loadState, setLoadState] = useState("loading"); // loading | ready | not-found | error
   const [copyLabel, setCopyLabel] = useState("Copy tracking link");
 
-  const currentIndex = useMemo(
-    () => Math.max(0, statuses.indexOf(order?.status || "New Lead")),
-    [order?.status, statuses]
-  );
-
-  useEffect(() => {
-    if (!orderId) {
-      return;
-    }
-
-    apiRequest(`/orders/${orderId}`)
+  const load = useCallback(() => {
+    apiRequest(`/orders/${encodeURIComponent(orderId)}`)
       .then((data) => {
-        setError("");
         setOrder(data.order);
-        setStatuses(data.statuses || fallbackStatuses);
+        setStatuses(data.statuses || orderStatusOptions);
+        setLoadState("ready");
       })
-      .catch((fetchError) => setError(fetchError.message));
+      .catch((error) => setLoadState(error.status === 404 ? "not-found" : "error"));
   }, [orderId]);
 
-  const copyTrackingLink = async () => {
-    const trackingLink = `${window.location.origin}/track/${orderId}`;
+  useEffect(() => {
+    load();
+  }, [load]);
 
+  const retry = () => {
+    setLoadState("loading");
+    load();
+  };
+
+  const copyTrackingLink = async () => {
     try {
-      await navigator.clipboard.writeText(trackingLink);
-      setCopyLabel("Copied");
-      window.setTimeout(() => setCopyLabel("Copy tracking link"), 1600);
+      await navigator.clipboard.writeText(`${window.location.origin}/track/${orderId}`);
+      setCopyLabel("Link copied");
     } catch {
       setCopyLabel("Copy failed");
     }
+
+    window.setTimeout(() => setCopyLabel("Copy tracking link"), 1800);
   };
 
   return (
-    <main className="track-page">
-      <section className="track-shell">
-        <header className="track-header">
-          <a className="track-brand" href="#/">
-            <span>WM</span>
-            <strong>WebMitra</strong>
-          </a>
-          <a href="#/templates">Choose another template</a>
-        </header>
+    <div className="wm-page">
+      <SiteHeader />
 
-        {error ? (
-          <div className="track-error">
-            <p>We could not find this tracking page.</p>
-            <strong>{error}</strong>
-          </div>
+      <main id="main-content" className="wm-container track-main">
+        {loadState === "loading" ? <SkeletonPage label="Loading your order" /> : null}
+
+        {loadState === "not-found" ? (
+          <EmptyState
+            title="We could not find this tracking page"
+            text="Please check the tracking link you were sent. If you think this is a mistake, contact Appzet Web Solution on WhatsApp."
+            actionLabel="Explore templates"
+            actionHref="/templates"
+          />
         ) : null}
 
-        {!order && !error ? <p className="track-loading">Loading order...</p> : null}
+        {loadState === "error" ? (
+          <ErrorState
+            title="Something went wrong"
+            text="We could not load your project information."
+            onRetry={retry}
+          />
+        ) : null}
 
-        {order ? (
+        {loadState === "ready" && order ? (
           <>
-            <section className="track-hero">
+            <section className="wm-card track-summary">
               <div>
-                <p className="track-kicker">Tracking ID {order.id}</p>
-                <h1>{order.template} website build</h1>
-                <p>
-                  Current status: <strong>{order.status}</strong>
+                <p className="wm-eyebrow">Tracking ID {order.id}</p>
+                <h1 className="track-title">{order.template} website</h1>
+                <p className="track-status-line">
+                  Current status: <StatusBadge status={order.status} />
                 </p>
               </div>
               <div className="track-actions">
-                <button type="button" onClick={copyTrackingLink}>
-                  {copyLabel}
-                </button>
                 {order.websiteUrl ? (
-                  <a href={order.websiteUrl} target="_blank" rel="noreferrer">
+                  <a className="wm-btn wm-btn-success" href={order.websiteUrl} target="_blank" rel="noreferrer">
                     Open website
                   </a>
                 ) : null}
+                <button className="wm-btn wm-btn-secondary" type="button" onClick={copyTrackingLink}>
+                  {copyLabel}
+                </button>
               </div>
             </section>
 
-            <section className="track-progress-card">
-              <div className="track-progress-bar">
-                <span
-                  style={{
-                    width: `${((currentIndex + 1) / statuses.length) * 100}%`,
-                  }}
-                ></span>
-              </div>
-              <div className="track-steps">
-                {statuses.map((status, index) => (
-                  <span
-                    className={index <= currentIndex ? "complete" : ""}
-                    key={status}
-                  >
-                    {status}
-                  </span>
-                ))}
-              </div>
-            </section>
+            <div className="track-grid">
+              <section className="wm-card" aria-labelledby="progress-heading">
+                <h2 id="progress-heading" className="track-h2">
+                  Project progress
+                </h2>
+                <OrderProgress status={order.status} statuses={statuses} />
+              </section>
 
-            <section className="track-timeline">
-              <div className="track-section-heading">
-                <p className="track-kicker">Timeline</p>
-                <h2>Step-by-step project updates</h2>
-              </div>
-              {order.timeline.map((item) => (
-                <article className="track-timeline-item" key={item._id || item.createdAt}>
-                  <span></span>
-                  <div>
-                    <strong>{item.title}</strong>
-                    <small>
-                      {item.status} {item.createdAt ? `- ${formatDateTime(item.createdAt)}` : ""}
-                    </small>
-                    {item.note ? <p>{item.note}</p> : null}
-                  </div>
-                </article>
-              ))}
-            </section>
+              <section className="wm-card" aria-labelledby="timeline-heading">
+                <h2 id="timeline-heading" className="track-h2">
+                  Project updates
+                </h2>
+                <ProjectTimeline items={[...(order.timeline || [])].reverse()} />
+              </section>
+            </div>
           </>
         ) : null}
-      </section>
-    </main>
+      </main>
+
+      <SiteFooter />
+    </div>
   );
 };
 

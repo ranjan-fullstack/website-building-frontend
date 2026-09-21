@@ -1,0 +1,65 @@
+/*
+  Appzet Web Solution design tokens.
+  The Appzet Web Solution PLATFORM brand lives here. Customer websites (/c/:slug) have their
+  own theme (see src/pages/client-site/siteConfig.js) and must not use these.
+  To re-brand: change the values below; nothing else should hard-code colours.
+*/
+:root {
+  /* Brand: blue (primary identity) */
+  --wm-primary: #2563eb;
+  --wm-primary-hover: #1d4ed8;
+  --wm-primary-light: #eff6ff;
+  --wm-primary-border: #bfdbfe;
+
+  /* Success / growth */
+  --wm-success: #16a34a;
+  --wm-success-hover: #15803d;
+  --wm-success-light: #f0fdf4;
+  --wm-success-border: #bbf7d0;
+
+  /* Creative / premium / AI */
+  --wm-purple: #7c3aed;
+  --wm-purple-hover: #6d28d9;
+  --wm-purple-light: #f5f3ff;
+  --wm-purple-border: #ddd6fe;
+
+  /* Error / warning / destructive only */
+  --wm-danger: #dc2626;
+  --wm-danger-hover: #b91c1c;
+  --wm-danger-light: #fef2f2;
+  --wm-danger-border: #fecaca;
+
+  /* Neutrals */
+  --wm-navy: #0f172a;
+  --wm-navy-soft: #1e293b;
+  --wm-background: #ffffff;
+  --wm-surface: #ffffff;
+  --wm-surface-secondary: #f8fafc;
+  --wm-border: #e2e8f0;
+  --wm-border-light: #f1f5f9;
+  --wm-text-primary: #0f172a;
+  --wm-text-secondary: #475569;
+  --wm-text-muted: #64748b;
+
+  /* Typography */
+  --wm-font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --wm-text-sm: 0.875rem;
+  --wm-text-base: 1rem;
+  --wm-text-lg: 1.125rem;
+  --wm-h3: clamp(1.25rem, 1.05rem + 0.9vw, 1.75rem);
+  --wm-h2: clamp(1.75rem, 1.3rem + 2vw, 2.75rem);
+  --wm-h1: clamp(2.125rem, 1.4rem + 3.4vw, 3.75rem);
+
+  /* Space, radius, elevation, motion */
+  --wm-radius-sm: 8px;
+  --wm-radius: 12px;
+  --wm-radius-lg: 20px;
+  --wm-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --wm-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+  --wm-shadow-lg: 0 20px 48px rgba(15, 23, 42, 0.14);
+  --wm-focus: 0 0 0 3px rgba(37, 99, 235, 0.35);
+  --wm-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --wm-container: 1180px;
+  --wm-gradient-brand: linear-gradient(135deg, var(--wm-primary), var(--wm-purple));
+  --wm-gradient-growth: linear-gradient(135deg, var(--wm-primary), var(--wm-success));
+}

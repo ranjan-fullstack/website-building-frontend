@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
+import EmptyState from "../../components/ui/EmptyState";
+import { SkeletonTable } from "../../components/ui/Skeleton";
+import StatusBadge from "../../components/ui/StatusBadge";
 import { apiRequest } from "../../services/api";
+import { PanelHeading } from "../dashboard/DashboardLayout";
 
 const emptyPayment = { orderId: "", amount: "", status: "Pending", method: "UPI" };
 
@@ -10,6 +14,7 @@ const PaymentsModule = () => {
   const [draft, setDraft] = useState(emptyPayment);
   const [savingId, setSavingId] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const loadPayments = () =>
     apiRequest("/admin/business/payments").then((data) => {
@@ -19,7 +24,7 @@ const PaymentsModule = () => {
     });
 
   useEffect(() => {
-    loadPayments().catch((requestError) => setError(requestError.message));
+    loadPayments().catch((requestError) => setError(requestError.message)).finally(() => setLoading(false));
   }, []);
 
   const updateDraft = (field, value) => {
@@ -62,30 +67,30 @@ const PaymentsModule = () => {
   const pendingCount = payments.filter((payment) => payment.status === "Pending").length;
 
   return (
-    <div className="dashboard-panel">
-      <div className="dashboard-heading">
-        <p className="dashboard-kicker">Billing</p>
-        <h1>Payments</h1>
-        <p>{pendingCount} pending payment{pendingCount === 1 ? "" : "s"} need follow-up.</p>
-      </div>
+    <div className="wm-panel">
+      <PanelHeading kicker="Billing" title="Payments" text={<>{pendingCount} pending payment{pendingCount === 1 ? "" : "s"} need follow-up.</>} />
 
-      {error ? <p className="dashboard-error">{error}</p> : null}
+      {error ? <p className="wm-alert wm-alert-error" role="alert">{error}</p> : null}
 
       <form className="business-inline-form" onSubmit={createPayment}>
-        <input
-          type="text"
+        <div className="wm-field">
+<label htmlFor="paym-f1">Order ID</label>
+<input id="paym-f1" className="wm-input" type="text"
           placeholder="Order ID"
           value={draft.orderId}
-          onChange={(event) => updateDraft("orderId", event.target.value)}
-        />
-        <input
-          type="number"
+          onChange={(event) => updateDraft("orderId", event.target.value)} />
+</div>
+        <div className="wm-field">
+<label htmlFor="paym-f2">Amount</label>
+<input id="paym-f2" className="wm-input" type="number"
           min="0"
           placeholder="Amount"
           value={draft.amount}
-          onChange={(event) => updateDraft("amount", event.target.value)}
-        />
-        <select
+          onChange={(event) => updateDraft("amount", event.target.value)} />
+</div>
+        <div className="wm-field">
+<label htmlFor="paym-f3">Status</label>
+<select id="paym-f3" className="wm-select"
           value={draft.status}
           onChange={(event) => updateDraft("status", event.target.value)}
         >
@@ -95,7 +100,10 @@ const PaymentsModule = () => {
             </option>
           ))}
         </select>
-        <select
+</div>
+        <div className="wm-field">
+<label htmlFor="paym-f4">Method</label>
+<select id="paym-f4" className="wm-select"
           value={draft.method}
           onChange={(event) => updateDraft("method", event.target.value)}
         >
@@ -105,12 +113,14 @@ const PaymentsModule = () => {
             </option>
           ))}
         </select>
-        <button type="submit" disabled={savingId === "new"}>
+</div>
+        <button className="wm-btn wm-btn-primary" type="submit" disabled={savingId === "new"}>
           {savingId === "new" ? "Saving..." : "Add payment"}
         </button>
       </form>
 
-      <div className="admin-table-wrap">
+      {loading ? <SkeletonTable rows={4} /> : null}
+      <div className="admin-table-wrap" hidden={loading}>
         <table className="admin-table">
           <thead>
             <tr>
@@ -127,12 +137,13 @@ const PaymentsModule = () => {
                 <td data-label="Order ID">{payment.orderId}</td>
                 <td data-label="Amount">Rs {payment.amount}</td>
                 <td data-label="Status">
-                  <span className="table-pill">{payment.status}</span>
+                  <StatusBadge status={payment.status} />
                 </td>
                 <td data-label="Method">{payment.method}</td>
                 <td data-label="Action">
                   <button
-                    type="button"
+ className="wm-btn wm-btn-secondary wm-btn-sm"
+ type="button"
                     disabled={payment.status === "Paid" || savingId === payment.id}
                     onClick={() => markPaid(payment.id)}
                   >
@@ -143,7 +154,9 @@ const PaymentsModule = () => {
             ))}
             {!payments.length ? (
               <tr>
-                <td colSpan="5">No payments yet.</td>
+                <td colSpan="5">
+<EmptyState title="No payments yet" text="Record a payment using the form above." />
+</td>
               </tr>
             ) : null}
           </tbody>

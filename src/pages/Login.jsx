@@ -1,28 +1,12 @@
-import { useEffect, useRef, useState } from "react";
-import { useAuth } from "../context/useAuth";
-import { apiRequest } from "../services/api";
+import { useEffect, useState } from "react";
+import "../styles/ui.css";
 import "../styles/Auth.css";
+import { useAuth } from "../context/useAuth";
+import { whatsappLink } from "../data/site";
+import LogoMark from "../components/ui/LogoMark";
+import { apiRequest } from "../services/api";
 
-const GOOGLE_SCRIPT_ID = "google-identity-services";
-
-const loadGoogleScript = () =>
-  new Promise((resolve, reject) => {
-    const existingScript = document.getElementById(GOOGLE_SCRIPT_ID);
-
-    if (existingScript) {
-      resolve();
-      return;
-    }
-
-    const script = document.createElement("script");
-    script.id = GOOGLE_SCRIPT_ID;
-    script.src = "https://accounts.google.com/gsi/client";
-    script.async = true;
-    script.defer = true;
-    script.onload = resolve;
-    script.onerror = reject;
-    document.body.appendChild(script);
-  });
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 const getPendingWhatsAppLead = () => {
   try {
@@ -39,12 +23,12 @@ const getWhatsAppHref = (siteName) => {
     `Hi, I saw the ${siteName} website template preview and want to create a website for my business.`
   );
 
-  return `https://wa.me/917995590740?text=${message}`;
+  return whatsappLink.split("?")[0] + `?text=${message}`;
 };
 
-const getFromSlug = (hash) => {
+const getQueryParam = (hash, key) => {
   const queryString = (hash || "").split("?")[1] || "";
-  return new URLSearchParams(queryString).get("from") || "";
+  return new URLSearchParams(queryString).get(key) || "";
 };
 
 const getInitials = (name) =>
@@ -55,19 +39,43 @@ const getInitials = (name) =>
     .map((word) => word[0].toUpperCase())
     .join("");
 
+const validate = (mode, values) => {
+  const errors = {};
+
+  if (mode === "register" && values.name.trim().length < 2) {
+    errors.name = "Please enter your name.";
+  }
+
+  if (!EMAIL_PATTERN.test(values.email.trim())) {
+    errors.email = "Please enter a valid email address.";
+  }
+
+  if (!values.password) {
+    errors.password = "Please enter your password.";
+  } else if (mode === "register" && values.password.length < 8) {
+    errors.password = "Password must be at least 8 characters.";
+  }
+
+  return errors;
+};
+
 const Login = ({ hash }) => {
-  const googleButtonRef = useRef(null);
-  const { isAuthenticated, loginWithGoogleCredential, logout, user } = useAuth();
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
+  const { isAuthenticated, login, register, logout, user } = useAuth();
+  const [mode, setMode] = useState(() =>
+    getQueryParam(hash, "mode") === "register" ? "register" : "login"
+  );
+  const [values, setValues] = useState({ name: "", email: "", password: "" });
+  const [errors, setErrors] = useState({});
+  const [formError, setFormError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [clientBranding, setClientBranding] = useState(null);
-  const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+  const slug = getQueryParam(hash, "from");
+  const activeBranding = slug ? clientBranding : null;
+  const isRegister = mode === "register";
 
   useEffect(() => {
-    const slug = getFromSlug(hash);
-
     if (!slug) {
-      setClientBranding(null);
       return;
     }
 
@@ -88,163 +96,211 @@ const Login = ({ hash }) => {
     return () => {
       isCancelled = true;
     };
-  }, [hash]);
+  }, [slug]);
 
-  useEffect(() => {
-    if (!clientId || !googleButtonRef.current) {
+  const updateValue = (field, value) => {
+    setValues((current) => ({ ...current, [field]: value }));
+    setErrors((current) => ({ ...current, [field]: undefined }));
+  };
+
+  const switchMode = (nextMode) => {
+    setMode(nextMode);
+    setErrors({});
+    setFormError("");
+  };
+
+  const finishLogin = async (signedInUser) => {
+    const pendingLead = getPendingWhatsAppLead();
+
+    if (pendingLead) {
+      try {
+        await apiRequest("/orders", {
+          method: "POST",
+          body: JSON.stringify({
+            name: signedInUser.name,
+            phone: "Not provided",
+            template: pendingLead.templateTitle,
+          }),
+        });
+        window.localStorage.removeItem("webmitra_pending_whatsapp");
+        window.location.href = getWhatsAppHref(pendingLead.siteName);
+        return;
+      } catch (error) {
+        console.error("Unable to save pending lead", error);
+      }
+    }
+
+    window.location.hash = "#/dashboard";
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setFormError("");
+
+    const nextErrors = validate(mode, values);
+    setErrors(nextErrors);
+
+    if (Object.keys(nextErrors).length) {
       return;
     }
 
-    let isMounted = true;
+    setSubmitting(true);
 
-    loadGoogleScript()
-      .then(() => {
-        if (!isMounted || !window.google) {
-          return;
-        }
+    try {
+      const signedInUser = isRegister
+        ? await register(values.name.trim(), values.email.trim(), values.password)
+        : await login(values.email.trim(), values.password);
 
-        window.google.accounts.id.initialize({
-          client_id: clientId,
-          login_hint: email.trim() || undefined,
-          callback: async (response) => {
-            try {
-              const loggedInUser = await loginWithGoogleCredential(response.credential);
+      await finishLogin(signedInUser);
+    } catch (error) {
+      setFormError(error.message || "We could not sign you in. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
-              if (
-                email.trim() &&
-                loggedInUser.email.toLowerCase() !== email.trim().toLowerCase()
-              ) {
-                setMessage(`Signed in as ${loggedInUser.email}.`);
-              } else {
-                setMessage(`Welcome, ${loggedInUser.name}.`);
-              }
-
-              const pendingLead = getPendingWhatsAppLead();
-
-              if (pendingLead) {
-                await apiRequest("/orders", {
-                  method: "POST",
-                  body: JSON.stringify({
-                    name: loggedInUser.name,
-                    phone: "Not provided",
-                    template: pendingLead.templateTitle,
-                  }),
-                });
-
-                window.localStorage.removeItem("webmitra_pending_whatsapp");
-                window.location.href = getWhatsAppHref(pendingLead.siteName);
-                return;
-              }
-
-              window.location.hash = "#/dashboard";
-            } catch (error) {
-              setMessage(error.message || "Google sign-in failed. Please try again.");
-            }
-          },
-        });
-
-        window.google.accounts.id.renderButton(googleButtonRef.current, {
-          theme: "outline",
-          size: "large",
-          shape: "pill",
-          text: "continue_with",
-          width: 280,
-        });
-      })
-      .catch(() => {
-        setMessage("Could not load Google sign-in. Check your internet connection.");
-      });
-
-    return () => {
-      isMounted = false;
-    };
-  }, [clientId, email, loginWithGoogleCredential]);
+  const brandName = activeBranding ? activeBranding.name : "Appzet Web Solution";
 
   return (
     <main className="auth-page">
-      <section className="auth-card">
-        <a className="auth-back" href="#/">
+      <div className="auth-card">
+        {activeBranding ? (
+          <div className="auth-logo" aria-hidden="true">
+            {activeBranding.initials}
+          </div>
+        ) : (
+          <LogoMark size={64} />
+        )}
+
+        {isAuthenticated ? (
+          <>
+            <h1>You are signed in</h1>
+            <div className="auth-user-card">
+              <strong>{user.name}</strong>
+              <span>{user.email}</span>
+              <a className="auth-button" href="#/dashboard">
+                Open dashboard
+              </a>
+              <button className="auth-button secondary" type="button" onClick={logout}>
+                Sign out
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <h1>{isRegister ? `Create your ${brandName} account` : `Sign in to ${brandName}`}</h1>
+            <p className="auth-sub">
+              {isRegister
+                ? "Create an account to choose a template and track your website."
+                : "Sign in to track your website and get support."}
+            </p>
+
+            <form className="auth-form" onSubmit={handleSubmit} noValidate>
+              {isRegister ? (
+                <div className="wm-field">
+                  <label htmlFor="auth-name">Full name</label>
+                  <input
+                    id="auth-name"
+                    className="wm-input"
+                    type="text"
+                    name="name"
+                    autoComplete="name"
+                    value={values.name}
+                    disabled={submitting}
+                    aria-invalid={Boolean(errors.name)}
+                    aria-describedby={errors.name ? "auth-name-error" : undefined}
+                    onChange={(event) => updateValue("name", event.target.value)}
+                  />
+                  {errors.name ? (
+                    <span className="wm-field-error" id="auth-name-error">
+                      {errors.name}
+                    </span>
+                  ) : null}
+                </div>
+              ) : null}
+
+              <div className="wm-field">
+                <label htmlFor="auth-email">Email</label>
+                <input
+                  id="auth-email"
+                  className="wm-input"
+                  type="email"
+                  name="email"
+                  autoComplete="email"
+                  inputMode="email"
+                  placeholder="you@example.com"
+                  value={values.email}
+                  disabled={submitting}
+                  aria-invalid={Boolean(errors.email)}
+                  aria-describedby={errors.email ? "auth-email-error" : undefined}
+                  onChange={(event) => updateValue("email", event.target.value)}
+                />
+                {errors.email ? (
+                  <span className="wm-field-error" id="auth-email-error">
+                    {errors.email}
+                  </span>
+                ) : null}
+              </div>
+
+              <div className="wm-field">
+                <label htmlFor="auth-password">Password</label>
+                <div className="auth-password">
+                  <input
+                    id="auth-password"
+                    className="wm-input"
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    autoComplete={isRegister ? "new-password" : "current-password"}
+                    value={values.password}
+                    disabled={submitting}
+                    aria-invalid={Boolean(errors.password)}
+                    aria-describedby={errors.password ? "auth-password-error" : isRegister ? "auth-password-help" : undefined}
+                    onChange={(event) => updateValue("password", event.target.value)}
+                  />
+                  <button
+                    className="auth-toggle"
+                    type="button"
+                    aria-pressed={showPassword}
+                    onClick={() => setShowPassword((visible) => !visible)}
+                  >
+                    {showPassword ? "Hide" : "Show"}
+                  </button>
+                </div>
+                {errors.password ? (
+                  <span className="wm-field-error" id="auth-password-error">
+                    {errors.password}
+                  </span>
+                ) : isRegister ? (
+                  <span className="wm-help" id="auth-password-help">
+                    At least 8 characters.
+                  </span>
+                ) : null}
+              </div>
+
+              {formError ? (
+                <p className="wm-alert wm-alert-error" role="alert">
+                  {formError}
+                </p>
+              ) : null}
+
+              <button className="wm-btn wm-btn-primary wm-btn-lg auth-submit" type="submit" disabled={submitting}>
+                {submitting ? "Please wait..." : isRegister ? "Create account" : "Sign in"}
+              </button>
+            </form>
+
+            <p className="auth-switch">
+              {isRegister ? "Already have an account?" : "New to Appzet Web Solution?"}{" "}
+              <button type="button" onClick={() => switchMode(isRegister ? "login" : "register")}>
+                {isRegister ? "Sign in" : "Create an account"}
+              </button>
+            </p>
+          </>
+        )}
+
+        <a className="auth-back" href="/">
           Back to home
         </a>
-
-        <div className="auth-grid">
-          <div className="auth-copy">
-            <p className="auth-kicker">
-              {clientBranding ? `${clientBranding.name} account` : "WebMitra account"}
-            </p>
-            <h1>Continue with Google and start building faster</h1>
-            <p>
-              WebMitra uses the official Google Sign-In button. We receive only
-              your verified profile details, never your Google password.
-            </p>
-            <div className="auth-proof-row">
-              <span>Official Google Sign-In</span>
-              <span>Project tracking</span>
-              <span>HTTPS protected</span>
-            </div>
-          </div>
-
-          <div className="auth-panel">
-            <div className="auth-panel-top">
-              <div className="auth-logo">{clientBranding ? clientBranding.initials : "WM"}</div>
-              <span className="auth-secure-pill">Secure sign in</span>
-            </div>
-            <h2>{clientBranding ? `Sign in to ${clientBranding.name}` : "Sign in to WebMitra"}</h2>
-            <p>Use your own Google account for project updates and support.</p>
-
-            {!clientId ? (
-              <div className="auth-warning">
-                Google Sign-In is temporarily unavailable. Please contact
-                WebMitra support for account help.
-              </div>
-            ) : isAuthenticated ? (
-              <div className="auth-user-card">
-                {user.avatar ? <img src={user.avatar} alt={user.name} /> : null}
-                <div>
-                  <strong>{user.name}</strong>
-                  <span>{user.email}</span>
-                  <span className={`role-badge ${user.role}`}>{user.role}</span>
-                </div>
-                <a
-                  className="auth-button"
-                  href="#/dashboard"
-                >
-                  Open dashboard
-                </a>
-                <button className="auth-button secondary" type="button" onClick={logout}>
-                  Sign out
-                </button>
-              </div>
-            ) : (
-              <form className="auth-login-form" onSubmit={(event) => event.preventDefault()}>
-                <label className="auth-field">
-                  Google account email
-                  <input
-                    type="email"
-                    value={email}
-                    placeholder="you@gmail.com"
-                    autoComplete="username"
-                    inputMode="email"
-                    name="username"
-                    onChange={(event) => setEmail(event.target.value)}
-                  />
-                </label>
-                <p className="auth-helper">
-                  Optional: enter your Google account email to prefill the official
-                  Google Sign-In prompt.
-                </p>
-                <div className="google-button-wrap" ref={googleButtonRef} />
-                <p className="auth-small-print">
-                  Do not enter your Google password on WebMitra. Authentication
-                  happens only through Google&apos;s secure sign-in window.
-                </p>
-              </form>
-            )}
-
-            {message ? <p className="auth-message">{message}</p> : null}
-          </div>
-        </div>
-      </section>
+      </div>
     </main>
   );
 };

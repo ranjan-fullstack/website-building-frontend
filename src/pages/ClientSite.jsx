@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { apiRequest } from "../services/api";
 import "../styles/clientSiteTailwind.css";
-import { academy } from "./client-site/academyContent";
+import { getSiteConfig, getThemeStyle } from "./client-site/siteConfig";
 import AcademyDetails from "./client-site/AcademyDetails";
 import AdmissionForm from "./client-site/AdmissionForm";
 import Facilities from "./client-site/Facilities";
@@ -17,11 +17,28 @@ import WhatsAppFloat from "./client-site/WhatsAppFloat";
 const emptyInquiry = { name: "", phone: "", message: "" };
 const emptyAdmission = { studentName: "", phone: "", age: "", batchPreference: "" };
 
+// Customer sites use Poppins; load it only on these routes so Appzet Web Solution pages stay light.
+const ensureClientFont = () => {
+  if (document.getElementById("client-site-font")) {
+    return;
+  }
+
+  const link = document.createElement("link");
+  link.id = "client-site-font";
+  link.rel = "stylesheet";
+  link.href =
+    "https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap";
+  document.head.appendChild(link);
+};
+
 const getSlugFromHash = (hash) =>
   hash.replace(/^#?\/?/, "").split("/").filter(Boolean)[1] || "";
 
 const ClientSite = ({ hash }) => {
   const slug = getSlugFromHash(hash);
+  // Tenant -> site config -> theme + content. Customer branding is separate from Appzet Web Solution's.
+  const { content: academy, theme } = getSiteConfig(slug);
+  const themeStyle = getThemeStyle(theme);
   const [pageState, setPageState] = useState(() => (slug ? "loading" : "not-found"));
   const [clientName, setClientName] = useState(academy.name);
   const [statusError, setStatusError] = useState("");
@@ -35,6 +52,10 @@ const ClientSite = ({ hash }) => {
   const [admissionSubmitting, setAdmissionSubmitting] = useState(false);
   const [admissionSuccess, setAdmissionSuccess] = useState(false);
   const [admissionError, setAdmissionError] = useState("");
+
+  useEffect(() => {
+    ensureClientFont();
+  }, []);
 
   useEffect(() => {
     if (!slug) {
@@ -102,7 +123,7 @@ const ClientSite = ({ hash }) => {
 
   if (pageState === "loading") {
     return (
-      <div className="font-poppins grid min-h-screen place-items-center bg-dark">
+      <div className="font-poppins grid min-h-screen place-items-center bg-dark" style={themeStyle}>
         <svg className="animate-spin text-gold" width="36" height="36" viewBox="0 0 24 24" fill="none">
           <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="3" opacity="0.25" />
           <path d="M21 12a9 9 0 0 0-9-9" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
@@ -123,7 +144,7 @@ const ClientSite = ({ hash }) => {
   }
 
   return (
-    <div className="font-poppins bg-white">
+    <div className="font-poppins bg-white" style={themeStyle}>
       <SiteNav
         clientName={clientName}
         logo={academy.logo}

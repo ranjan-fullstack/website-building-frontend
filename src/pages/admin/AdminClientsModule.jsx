@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
+import EmptyState from "../../components/ui/EmptyState";
+import { SkeletonTable } from "../../components/ui/Skeleton";
+import StatusBadge from "../../components/ui/StatusBadge";
 import { apiRequest } from "../../services/api";
+import { PanelHeading } from "../dashboard/DashboardLayout";
 
 const emptyClient = { name: "", slug: "", subdomain: "", contactPhone: "" };
 const emptyTenantLink = { userId: "", clientId: "" };
@@ -9,6 +13,7 @@ const AdminClientsModule = () => {
   const [draft, setDraft] = useState(emptyClient);
   const [savingId, setSavingId] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const [tenantLink, setTenantLink] = useState(emptyTenantLink);
   const [linkingTenant, setLinkingTenant] = useState(false);
@@ -21,7 +26,7 @@ const AdminClientsModule = () => {
     });
 
   useEffect(() => {
-    loadClients().catch((requestError) => setError(requestError.message));
+    loadClients().catch((requestError) => setError(requestError.message)).finally(() => setLoading(false));
   }, []);
 
   const updateDraft = (field, value) => {
@@ -86,46 +91,47 @@ const AdminClientsModule = () => {
   };
 
   return (
-    <div className="dashboard-panel">
-      <div className="dashboard-heading">
-        <p className="dashboard-kicker">Client sites</p>
-        <h1>Clients</h1>
-        <p>Create client sites, pause or unpause access, and link user accounts.</p>
-      </div>
+    <div className="wm-panel">
+      <PanelHeading kicker="Client sites" title="Clients" text="Create client sites, pause or unpause access, and link user accounts." />
 
-      {error ? <p className="dashboard-error">{error}</p> : null}
+      {error ? <p className="wm-alert wm-alert-error" role="alert">{error}</p> : null}
 
       <form className="business-inline-form" onSubmit={createClient}>
-        <input
-          type="text"
+        <div className="wm-field">
+<label htmlFor="admi-f1">Client name</label>
+<input id="admi-f1" className="wm-input" type="text"
           placeholder="Client name"
           value={draft.name}
-          onChange={(event) => updateDraft("name", event.target.value)}
-        />
-        <input
-          type="text"
+          onChange={(event) => updateDraft("name", event.target.value)} />
+</div>
+        <div className="wm-field">
+<label htmlFor="admi-f2">Slug</label>
+<input id="admi-f2" className="wm-input" type="text"
           placeholder="Slug (cricket-academy)"
           value={draft.slug}
-          onChange={(event) => updateDraft("slug", event.target.value)}
-        />
-        <input
-          type="text"
+          onChange={(event) => updateDraft("slug", event.target.value)} />
+</div>
+        <div className="wm-field">
+<label htmlFor="admi-f3">Subdomain</label>
+<input id="admi-f3" className="wm-input" type="text"
           placeholder="Subdomain (optional)"
           value={draft.subdomain}
-          onChange={(event) => updateDraft("subdomain", event.target.value)}
-        />
-        <input
-          type="tel"
+          onChange={(event) => updateDraft("subdomain", event.target.value)} />
+</div>
+        <div className="wm-field">
+<label htmlFor="admi-f4">Contact phone</label>
+<input id="admi-f4" className="wm-input" type="tel"
           placeholder="Contact phone"
           value={draft.contactPhone}
-          onChange={(event) => updateDraft("contactPhone", event.target.value)}
-        />
-        <button type="submit" disabled={savingId === "new"}>
+          onChange={(event) => updateDraft("contactPhone", event.target.value)} />
+</div>
+        <button className="wm-btn wm-btn-primary" type="submit" disabled={savingId === "new"}>
           {savingId === "new" ? "Saving..." : "Add client"}
         </button>
       </form>
 
-      <div className="admin-table-wrap">
+      {loading ? <SkeletonTable rows={4} /> : null}
+      <div className="admin-table-wrap" hidden={loading}>
         <table className="admin-table">
           <thead>
             <tr>
@@ -143,11 +149,12 @@ const AdminClientsModule = () => {
                 <td data-label="Slug">{client.slug}</td>
                 <td data-label="Subdomain">{client.subdomain || "-"}</td>
                 <td data-label="Status">
-                  <span className="table-pill">{client.status}</span>
+                  <StatusBadge status={client.status} />
                 </td>
                 <td data-label="Action">
                   <button
-                    type="button"
+ className="wm-btn wm-btn-secondary wm-btn-sm"
+ type="button"
                     disabled={savingId === client.id}
                     onClick={() => toggleClientStatus(client)}
                   >
@@ -162,32 +169,33 @@ const AdminClientsModule = () => {
             ))}
             {!clients.length ? (
               <tr>
-                <td colSpan="5">No clients yet.</td>
+                <td colSpan="5">
+<EmptyState title="No clients yet" text="Create your first client site using the form above." />
+</td>
               </tr>
             ) : null}
           </tbody>
         </table>
       </div>
 
-      <div className="dashboard-heading" style={{ marginTop: "32px" }}>
-        <p className="dashboard-kicker">Account linking</p>
-        <h1>Link a user to a client</h1>
-        <p>Assign a logged-in user's account to a client so they see that client's dashboard.</p>
-      </div>
+      <PanelHeading kicker="Account linking" title="Link a user to a client" text="Assign a logged-in user's account to a client so they see that client's dashboard." />
 
-      {tenantMessage ? <p className="table-pill">{tenantMessage}</p> : null}
-      {tenantError ? <p className="dashboard-error">{tenantError}</p> : null}
+      {tenantMessage ? <p className="wm-alert wm-alert-success" role="status">{tenantMessage}</p> : null}
+      {tenantError ? <p className="wm-alert wm-alert-error" role="alert">{tenantError}</p> : null}
 
       <form className="business-inline-form" onSubmit={linkUserToTenant}>
-        <input
-          type="text"
+        <div className="wm-field">
+<label htmlFor="admi-f5">User ID</label>
+<input id="admi-f5" className="wm-input" type="text"
           placeholder="User ID"
           value={tenantLink.userId}
           onChange={(event) =>
             setTenantLink((currentLink) => ({ ...currentLink, userId: event.target.value }))
-          }
-        />
-        <select
+          } />
+</div>
+        <div className="wm-field">
+<label htmlFor="admi-f6">Client</label>
+<select id="admi-f6" className="wm-select"
           value={tenantLink.clientId}
           onChange={(event) =>
             setTenantLink((currentLink) => ({ ...currentLink, clientId: event.target.value }))
@@ -200,7 +208,8 @@ const AdminClientsModule = () => {
             </option>
           ))}
         </select>
-        <button type="submit" disabled={linkingTenant || !tenantLink.userId || !tenantLink.clientId}>
+</div>
+        <button className="wm-btn wm-btn-primary" type="submit" disabled={linkingTenant || !tenantLink.userId || !tenantLink.clientId}>
           {linkingTenant ? "Linking..." : "Link user"}
         </button>
       </form>

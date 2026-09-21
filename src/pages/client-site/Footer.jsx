@@ -21,7 +21,7 @@ const Footer = ({ clientName, logo }) => {
           </a>
         </nav>
 
-        <p className="text-xs text-slate-500">Powered by WebMitra</p>
+        <p className="text-xs text-slate-500">Powered by Appzet Web Solution</p>
       </div>
     </footer>
   );

@@ -4,7 +4,7 @@ import { freeTemplatePrompts } from "../data/templateData";
 import { useAuth } from "../context/useAuth";
 import { apiRequest } from "../services/api";
 
-const companyWhatsAppNumber = "917995590740";
+const companyWhatsAppNumber = "919692428905";
 
 const imageUrl = (query, width = 1200, height = 850) => {
   const keywords = query
@@ -720,9 +720,9 @@ const TemplatePreview = ({
 
       <footer className="template-footer">
         <div className="template-footer-brand">
-          <span className="template-brand-mark">WM</span>
+          <span className="template-brand-mark">AW</span>
           <div>
-            <strong>WebMitra</strong>
+            <strong>Appzet Web Solution</strong>
             <p>Affordable business websites for Indian local shops and services.</p>
           </div>
         </div>

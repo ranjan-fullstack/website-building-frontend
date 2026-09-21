@@ -1,83 +1,101 @@
-import "../styles/Template.css";
-import { freeTemplatePrompts } from "../data/templateData";
+import { useMemo, useState } from "react";
+import "../styles/ui.css";
+import "../styles/Marketing.css";
+import TemplateCard from "../components/ui/TemplateCard";
+import EmptyState from "../components/ui/EmptyState";
+import SiteFooter from "../components/ui/SiteFooter";
+import SiteHeader from "../components/ui/SiteHeader";
+import { availableCategories, templateCatalog } from "../data/templateCatalog";
 
-const TemplateBuilder = ({ basePath = "#/templates", embedded = false }) => {
+const TemplateBuilder = ({ basePath = "/templates", embedded = false }) => {
+  // The dashboard passes a hash path ("#/dashboard/templates"); public pages use "/templates".
+  const [category, setCategory] = useState("All");
+  const [query, setQuery] = useState("");
+
+  const visibleTemplates = useMemo(() => {
+    const search = query.trim().toLowerCase();
+
+    return templateCatalog.filter((template) => {
+      const matchesCategory = category === "All" || template.categories.includes(category);
+      const matchesSearch =
+        !search ||
+        `${template.title} ${template.intro} ${template.categories.join(" ")}`
+          .toLowerCase()
+          .includes(search);
+
+      return matchesCategory && matchesSearch;
+    });
+  }, [category, query]);
+
+  const gallery = (
+    <section className="wm-gallery" aria-labelledby="gallery-heading">
+      <p className="wm-eyebrow">Template gallery</p>
+      <h1 id="gallery-heading" className="wm-h2">
+        Pick a design made for your kind of business
+      </h1>
+      <p className="wm-lead">
+        Preview how your website could look, then choose a template. We customise it with your
+        business details and take it live.
+      </p>
+
+      <div className="wm-gallery-tools">
+        <div className="wm-chips" role="group" aria-label="Filter by category">
+          {availableCategories.map((item) => (
+            <button
+              key={item}
+              type="button"
+              className={`wm-chip ${category === item ? "active" : ""}`}
+              aria-pressed={category === item}
+              onClick={() => setCategory(item)}
+            >
+              {item}
+            </button>
+          ))}
+        </div>
+        <div className="wm-field wm-gallery-search">
+          <label htmlFor="template-search">Search templates</label>
+          <input
+            id="template-search"
+            className="wm-input"
+            type="search"
+            placeholder="e.g. clinic, gym, shop"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+          />
+        </div>
+      </div>
+
+      {visibleTemplates.length ? (
+        <div className="wm-template-grid">
+          {visibleTemplates.map((template) => (
+            <TemplateCard key={template.slug} template={template} basePath={basePath} />
+          ))}
+        </div>
+      ) : (
+        <EmptyState
+          title="No templates match your search"
+          text="Try a different category or clear the search box."
+          actionLabel="Show all templates"
+          onAction={() => {
+            setCategory("All");
+            setQuery("");
+          }}
+        />
+      )}
+    </section>
+  );
+
+  if (embedded) {
+    return <div className="template-builder-embedded wm-page">{gallery}</div>;
+  }
+
   return (
-    <div className={embedded ? "template-builder-embedded" : "home-page"}>
-      {/* HEADER */}
-      {!embedded ? (
-        <header className="header">
-          <div className="brand-mark">
-            <div className="brand-badge">WM</div>
-            <div>
-              <p className="brand-name">WebMitra</p>
-              <span className="brand-subtitle">
-                Choose a template for your business
-              </span>
-            </div>
-          </div>
-
-          <nav className="nav-links">
-            <a href="#/">Home</a>
-            <a href="#/templates">Templates</a>
-            <a href="#pricing">Pricing</a>
-          </nav>
-
-          <a className="btn btn-primary" href="#/">
-            Back to Home
-          </a>
-        </header>
-      ) : null}
-
-      {/* MAIN */}
-      <main>
-        <section className="builder-flow builder-page">
-          <p className="section-kicker">Choose your template</p>
-
-          <h2>Pick a design and preview your business website</h2>
-
-          <p className="pricing-intro">
-            Select a template based on your business type. Preview how your
-            website will look, then contact us on WhatsApp to make it live for
-            your shop.
-          </p>
-
-          {/* TEMPLATE CARDS */}
-          <div className="cards two-column free-template-grid template-gallery-grid">
-            {freeTemplatePrompts.map((template) => (
-              <article
-                className="free-template-card template-gallery-card"
-                key={template.slug}
-              >
-                <div className="free-template-top">
-                  <h4>{template.title}</h4>
-                  <span>{template.cta}</span>
-                </div>
-
-                <p>{template.intro}</p>
-
-                <p>
-                  <strong>Sections:</strong> {template.sections}
-                </p>
-
-                <p>
-                  <strong>Editable:</strong> {template.editable}
-                </p>
-
-                <div className="template-gallery-actions">
-                  {/* ONLY ONE CLEAR ACTION */}
-                  <a
-                    className="btn btn-primary"
-                    href={`${basePath}/${template.slug}`}
-                  >
-                    Preview This Template
-                  </a>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
+    <div className="wm-page">
+      <SiteHeader />
+      <main id="main-content" className="wm-container wm-section">
+        {gallery}
       </main>
+      <SiteFooter />
     </div>
   );
 };

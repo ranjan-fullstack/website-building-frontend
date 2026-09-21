@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
+import EmptyState from "../../components/ui/EmptyState";
+import { SkeletonTable } from "../../components/ui/Skeleton";
+import StatusBadge from "../../components/ui/StatusBadge";
 import { apiRequest } from "../../services/api";
+import { PanelHeading } from "../dashboard/DashboardLayout";
 
 const emptyWebsite = {
   orderId: "",
@@ -14,6 +18,7 @@ const WebsitesModule = () => {
   const [draft, setDraft] = useState(emptyWebsite);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const loadWebsites = () =>
     apiRequest("/admin/business/websites").then((data) => {
@@ -22,7 +27,7 @@ const WebsitesModule = () => {
     });
 
   useEffect(() => {
-    loadWebsites().catch((requestError) => setError(requestError.message));
+    loadWebsites().catch((requestError) => setError(requestError.message)).finally(() => setLoading(false));
   }, []);
 
   const updateDraft = (field, value) => {
@@ -49,35 +54,36 @@ const WebsitesModule = () => {
   };
 
   return (
-    <div className="dashboard-panel">
-      <div className="dashboard-heading">
-        <p className="dashboard-kicker">Delivered work</p>
-        <h1>Websites</h1>
-        <p>Keep a clean list of delivered client websites and live URLs.</p>
-      </div>
+    <div className="wm-panel">
+      <PanelHeading kicker="Delivered work" title="Websites" text="Keep a clean list of delivered client websites and live URLs." />
 
-      {error ? <p className="dashboard-error">{error}</p> : null}
+      {error ? <p className="wm-alert wm-alert-error" role="alert">{error}</p> : null}
 
       <form className="business-inline-form" onSubmit={createWebsite}>
-        <input
-          type="text"
+        <div className="wm-field">
+<label htmlFor="webs-f1">Order ID</label>
+<input id="webs-f1" className="wm-input" type="text"
           placeholder="Order ID"
           value={draft.orderId}
-          onChange={(event) => updateDraft("orderId", event.target.value)}
-        />
-        <input
-          type="text"
+          onChange={(event) => updateDraft("orderId", event.target.value)} />
+</div>
+        <div className="wm-field">
+<label htmlFor="webs-f2">Client name</label>
+<input id="webs-f2" className="wm-input" type="text"
           placeholder="Client name"
           value={draft.clientName}
-          onChange={(event) => updateDraft("clientName", event.target.value)}
-        />
-        <input
-          type="url"
+          onChange={(event) => updateDraft("clientName", event.target.value)} />
+</div>
+        <div className="wm-field">
+<label htmlFor="webs-f3">Website URL</label>
+<input id="webs-f3" className="wm-input" type="url"
           placeholder="https://client-site.com"
           value={draft.websiteUrl}
-          onChange={(event) => updateDraft("websiteUrl", event.target.value)}
-        />
-        <select
+          onChange={(event) => updateDraft("websiteUrl", event.target.value)} />
+</div>
+        <div className="wm-field">
+<label htmlFor="webs-f4">Status</label>
+<select id="webs-f4" className="wm-select"
           value={draft.status}
           onChange={(event) => updateDraft("status", event.target.value)}
         >
@@ -87,12 +93,14 @@ const WebsitesModule = () => {
             </option>
           ))}
         </select>
-        <button type="submit" disabled={saving}>
+</div>
+        <button className="wm-btn wm-btn-primary" type="submit" disabled={saving}>
           {saving ? "Saving..." : "Add website"}
         </button>
       </form>
 
-      <div className="admin-table-wrap">
+      {loading ? <SkeletonTable rows={4} /> : null}
+      <div className="admin-table-wrap" hidden={loading}>
         <table className="admin-table">
           <thead>
             <tr>
@@ -112,14 +120,16 @@ const WebsitesModule = () => {
                   </a>
                 </td>
                 <td data-label="Status">
-                  <span className="table-pill">{website.status}</span>
+                  <StatusBadge status={website.status} />
                 </td>
                 <td data-label="Order ID">{website.orderId}</td>
               </tr>
             ))}
             {!websites.length ? (
               <tr>
-                <td colSpan="4">No delivered websites yet.</td>
+                <td colSpan="4">
+<EmptyState title="No delivered websites yet" text="Add a delivered website using the form above." />
+</td>
               </tr>
             ) : null}
           </tbody>

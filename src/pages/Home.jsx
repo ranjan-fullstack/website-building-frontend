@@ -1,69 +1,62 @@
-import "../styles/Home.css";
-import { useAuth } from "../context/useAuth";
-import { useState } from "react";
+import "../styles/ui.css";
+import "../styles/Marketing.css";
+import Icon from "../components/ui/Icon";
+import Reveal from "../components/ui/Reveal";
+import SiteFooter from "../components/ui/SiteFooter";
+import SiteHeader from "../components/ui/SiteHeader";
+import TemplateCard from "../components/ui/TemplateCard";
+import { whatsappLink } from "../data/site";
+import { templateCatalog } from "../data/templateCatalog";
 
-const whatsappLink =
-  "https://wa.me/917995590740?text=Hi%20WebMitra%2C%20I%20want%20to%20create%20a%20website%20for%20my%20business.";
-
-const features = [
-  "Free setup",
-  "Custom domain",
-  "Mobile friendly",
-  "Basic SEO",
-  "WhatsApp integration",
-  "Fast support",
+const trustPoints = [
+  ["mobile", "Mobile Responsive"],
+  ["search", "SEO Ready"],
+  ["chat", "WhatsApp Ready"],
+  ["bolt", "Fast Delivery"],
+  ["tag", "Affordable"],
 ];
 
-const steps = [
-  {
-    number: "01",
-    title: "Choose your plan",
-    text: "Pick the package that matches your business goals and budget.",
-  },
-  {
-    number: "02",
-    title: "Share your business details",
-    text: "Send your logo, photos, services, and contact details in one simple flow.",
-  },
-  {
-    number: "03",
-    title: "Launch and collect leads",
-    text: "We design, refine, and publish your site so customers can reach you fast.",
-  },
+const journey = [
+  ["Choose a Template", "Browse designs made for your kind of business and preview them."],
+  ["Tell Us About Your Business", "Share your logo, photos, services and contact details."],
+  ["We Build Your Website", "We customise the template with your content and branding."],
+  ["Review & Approve", "Check the draft, ask for changes and approve when happy."],
+  ["Go Live", "We publish your website so customers can find and contact you."],
+];
+
+const services = [
+  ["globe", "Business Website", "Professional websites for local businesses.", ""],
+  ["layout", "Landing Page", "Conversion-focused landing pages.", ""],
+  ["cart", "E-Commerce", "Online stores for your products.", ""],
+  ["refresh", "Website Redesign", "Modernize your existing website.", "purple"],
+  ["search", "SEO Setup", "Search-engine-ready website structure.", ""],
+  ["chat", "WhatsApp Integration", "Help customers contact your business directly.", "green"],
+];
+
+const businessTypes = [
+  "Restaurants",
+  "Salons",
+  "Gyms",
+  "Coaching Centers",
+  "Schools",
+  "Clinics",
+  "Real Estate",
+  "Local Shops",
+  "Service Businesses",
+  "Freelancers",
+  "Small Companies",
 ];
 
 const benefits = [
-  {
-    title: "Low monthly pricing",
-    text: "Get online without paying a heavy one-time agency fee or premium global-builder pricing.",
-  },
-  {
-    title: "Done-for-you setup",
-    text: "No coding, no confusion, and no need to manage technical tools yourself.",
-  },
-  {
-    title: "Built for real leads",
-    text: "Inquiry forms and WhatsApp buttons turn visitors into conversations.",
-  },
-  {
-    title: "Easy updates",
-    text: "Need a change later? We help you keep your website fresh and active.",
-  },
+  ["tag", "Low monthly pricing", "Get online without a heavy one-time agency fee."],
+  ["users", "Done-for-you setup", "No coding and no technical tools to manage yourself."],
+  ["chat", "Built for real enquiries", "Enquiry forms and WhatsApp buttons turn visitors into conversations."],
+  ["refresh", "Easy updates", "Need a change later? We help you keep your website fresh."],
 ];
 
 const pricingPlans = [
-  {
-    name: "Free",
-    price: "0",
-    details: "3 pages • Subdomain • Branding visible",
-    tag: "Start free and test your idea",
-  },
-  {
-    name: "Launch",
-    price: "249",
-    details: "5 pages • Mobile-ready • WhatsApp",
-    tag: "Cheaper than many premium builders",
-  },
+  { name: "Free", price: "0", details: "3 pages • Subdomain • Appzet Web Solution branding visible", tag: "Start free" },
+  { name: "Launch", price: "249", details: "5 pages • Mobile-ready • WhatsApp", tag: "For new businesses" },
   {
     name: "Growth",
     price: "499",
@@ -71,12 +64,7 @@ const pricingPlans = [
     tag: "Best value for local businesses",
     featured: true,
   },
-  {
-    name: "Business",
-    price: "999",
-    details: "Advanced features • Faster revisions",
-    tag: "For scaling Indian brands",
-  },
+  { name: "Business", price: "999", details: "Advanced features • Faster revisions", tag: "For growing brands" },
 ];
 
 const pricingTableRows = [
@@ -98,248 +86,256 @@ const pricingTableRows = [
   ["Custom sections / edits", "No", "Limited", "More", "Best access"],
 ];
 
-const testimonials = [
-  "Cheaper than premium global builders for businesses that mainly need a strong branded website.",
-  "More supportive than pure DIY tools because we help with setup, structure, and launch.",
-  "Better matched to Indian small businesses that want leads, trust, and WhatsApp enquiries fast.",
-];
-
 const faqs = [
-  {
-    question: "Why choose this over Wix or Hostinger?",
-    answer:
-      "Because many small businesses do not want to learn a builder. We focus on affordable done-for-you delivery, not just software access.",
-  },
-  {
-    question: "Why choose this over Dukaan or Instamojo?",
-    answer:
-      "Those tools are strong for stores and payments. We are better when your business needs a fuller website presence and stronger brand trust.",
-  },
-  {
-    question: "Can customers contact me on WhatsApp?",
-    answer:
-      "Yes, WhatsApp integration stays central because quick enquiries matter for Indian small businesses.",
-  },
+  [
+    "Do I need technical knowledge?",
+    "No. We handle the setup for you. You share your business details and we build and publish the website.",
+  ],
+  [
+    "Can customers contact me on WhatsApp?",
+    "Yes. WhatsApp buttons and enquiry forms are part of the templates so customers can reach you quickly.",
+  ],
+  [
+    "Can I track my website's progress?",
+    "Yes. Sign in to your account to see every stage of your order, from first contact to going live.",
+  ],
+  [
+    "Can I use my own domain?",
+    "Custom domains are included in the Growth and Business plans. Other plans use an Appzet Web Solution subdomain.",
+  ],
 ];
 
-const Home = () => {
-  const { isAuthenticated, logout, user } = useAuth();
-  const [menuOpen, setMenuOpen] = useState(false);
+const Home = () => (
+  <div className="wm-page">
+    <SiteHeader />
 
-  return (
-    <div className="home-page">
-     <header className="header">
-
-  <div className="brand-mark">
-    <div className="brand-badge">WM</div>
-    <div>
-      <p className="brand-name">WebMitra</p>
-      <span className="brand-subtitle">
-        Websites for growing local businesses
-      </span>
-    </div>
-  </div>
-
-  {/* HAMBURGER */}
-  <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
-    {menuOpen ? "✕" : "☰"}
-  </div>
-
-  {/* DESKTOP NAV */}
-  <nav className="nav-links desktop-only">
-    <a href="#pricing">Pricing</a>
-    <a href="#how-it-works">How it works</a>
-    <a href="/services">Services</a>
-    <a href="/templates">Templates</a>
-    <a href="/about">About</a>
-    <a href="/contact">Contact</a>
-    <a href="#faq">FAQ</a>
-  </nav>
-
-  <div className="header-actions desktop-only">
-    {isAuthenticated ? (
-      <>
-        <a className="account-pill" href="#/dashboard">
-          {user?.avatar ? <img src={user.avatar} alt="" /> : null}
-          <span>{user?.name || "My account"}</span>
-          <small>{user?.role}</small>
-        </a>
-        <button className="btn btn-secondary" onClick={logout}>
-          Sign out
-        </button>
-      </>
-    ) : (
-      <a className="btn btn-secondary" href="/login">
-        Google Sign-In
-      </a>
-    )}
-    <a className="btn btn-primary" href={whatsappLink}>
-      Talk on WhatsApp
-    </a>
-  </div>
-
-  {/* MOBILE MENU */}
-  <div className={`mobile-menu ${menuOpen ? "active" : ""}`}>
-    <a href="#pricing" onClick={() => setMenuOpen(false)}>Pricing</a>
-    <a href="#how-it-works" onClick={() => setMenuOpen(false)}>How it works</a>
-    <a href="/services">Services</a>
-    <a href="/templates">Templates</a>
-    <a href="/about" onClick={() => setMenuOpen(false)}>About</a>
-    <a href="/contact" onClick={() => setMenuOpen(false)}>Contact</a>
-    <a href="#faq" onClick={() => setMenuOpen(false)}>FAQ</a>
-
-    {isAuthenticated ? (
-      <>
-        <a className="account-pill" href="#/dashboard">
-          {user?.avatar ? <img src={user.avatar} alt="" /> : null}
-          <span>{user?.name || "My account"}</span>
-        </a>
-        <button className="btn btn-secondary" onClick={logout}>
-          Sign out
-        </button>
-      </>
-    ) : (
-      <a className="btn btn-secondary" href="/login">
-        Google Sign-In
-      </a>
-    )}
-
-    <a className="btn btn-primary" href={whatsappLink}>
-      Talk on WhatsApp
-    </a>
-  </div>
-
-</header>
-
-      <main>
-        <section className="hero">
-          <div className="hero-copy">
-            <p className="eyebrow">Built for Indian small businesses</p>
-            <h1>India-first website service that beats complicated builders on value</h1>
-            <p className="hero-text">
-              Wix, Hostinger, GoDaddy, Dukaan, and Instamojo make you do more
-              yourself. We help Indian businesses launch faster with done-for-you
-              setup, affordable monthly pricing, and a site that is built to look
-              professional from day one.
+    <main id="main-content">
+      <section className="wm-hero">
+        <div className="wm-container wm-hero-grid">
+          <div>
+            <p className="wm-eyebrow">Websites for Indian local businesses</p>
+            <h1 className="wm-h1">
+              Build Your Business Online With <span className="wm-gradient-text">Appzet Web Solution</span>
+            </h1>
+            <p className="wm-lead">
+              Professional websites for local businesses, startups and growing brands — without the
+              complexity or agency-level cost.
             </p>
-
-            <div className="hero-buttons">
-              <a className="btn btn-primary" href={whatsappLink}>
-                Talk on WhatsApp
+            <div className="wm-hero-actions">
+              <a className="wm-btn wm-btn-primary wm-btn-lg" href="/templates">
+                Get Your Website
               </a>
-              <a className="btn btn-secondary" href="#pricing">
-                See Pricing
+              <a className="wm-btn wm-btn-secondary wm-btn-lg" href="/templates">
+                Explore Templates
               </a>
             </div>
+            <ul className="wm-check-list" aria-label="What you get">
+              {["Mobile Responsive", "SEO Ready", "WhatsApp Ready", "Fast Delivery", "Affordable"].map((item) => (
+                <li key={item}>
+                  <Icon name="check" size={16} />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
 
-            <p className="trust-line">Done-for-you • Mobile-ready • Built for leads</p>
-
-            <div className="hero-stats">
-              <div>
-                <strong>₹249</strong>
-                <span>Starter monthly pricing</span>
+          <div className="wm-hero-visual" aria-hidden="true">
+            <div className="wm-browser">
+              <div className="wm-browser-bar">
+                <i />
+                <i />
+                <i />
+                <span>yourbusiness.com</span>
               </div>
-              <div>
-                <strong>48 hrs</strong>
-                <span>Fast launch target</span>
-              </div>
-              <div>
-                <strong>8</strong>
-                <span>Key competitors studied</span>
+              <div className="wm-browser-body">
+                <div className="wm-browser-nav">
+                  <strong>Your Business</strong>
+                  <span>
+                    <span>Services</span>
+                    <span>About</span>
+                    <span>Contact</span>
+                  </span>
+                </div>
+                <div className="wm-browser-hero">
+                  <b>Modern Design</b>
+                  <span>A professional website that helps customers find and contact you.</span>
+                  <em>Contact on WhatsApp</em>
+                </div>
+                <div className="wm-browser-tiles">
+                  <i />
+                  <i />
+                  <i />
+                </div>
               </div>
             </div>
-          </div>
-
-          <div className="hero-visual">
-            <div className="hero-card hero-card-main">
-              <span className="mini-label">Featured layout</span>
-              <h3>Modern local-business site</h3>
-              <p>
-                Made to help Indian businesses look credible, feel easy to contact,
-                and convert visitors into enquiries.
-              </p>
-              <div className="mini-preview-grid">
-                <div className="preview-panel tall"></div>
-                <div className="preview-panel"></div>
-                <div className="preview-panel"></div>
-                <div className="preview-panel wide"></div>
+            <div className="wm-phone">
+              <div className="wm-phone-screen">
+                <i />
+                <b />
+                <b />
+                <b />
               </div>
             </div>
-
-            <div className="hero-floating-card">
-              <p>Our position</p>
-              <strong>
-                Cheaper than premium builders. More supportive than DIY tools.
-              </strong>
+            <div className="wm-hero-tags">
+              <span className="wm-badge wm-badge-blue">Mobile</span>
+              <span className="wm-badge wm-badge-purple">SEO</span>
+              <span className="wm-badge wm-badge-green">WhatsApp</span>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section className="trust">
-          <p className="section-kicker">Trusted essentials</p>
-          <h2>What makes us the better fit for Indian, budget-conscious businesses</h2>
-          <div className="feature-pills">
-            {features.map((feature) => (
-              <span key={feature}>{feature}</span>
+      <section className="wm-section wm-section-alt" aria-labelledby="trust-heading">
+        <div className="wm-container">
+          <h2 id="trust-heading" className="wm-sr-only">
+            What every Appzet Web Solution website includes
+          </h2>
+          <div className="wm-trust-grid">
+            {trustPoints.map(([icon, label]) => (
+              <div className="wm-trust-item" key={label}>
+                <span className="wm-icon-tile green">
+                  <Icon name={icon} size={20} />
+                </span>
+                {label}
+              </div>
             ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section className="how" id="how-it-works">
-          <p className="section-kicker">How it works</p>
-          <h2>How we make it easier than building on software yourself</h2>
-          <div className="cards three-column">
-            {steps.map((step) => (
-              <article className="info-card step-card" key={step.number}>
-                <span className="step-number">{step.number}</span>
-                <h3>{step.title}</h3>
-                <p>{step.text}</p>
-              </article>
+      <section className="wm-section" id="how-it-works" aria-labelledby="how-heading">
+        <div className="wm-container">
+          <Reveal className="wm-section-head">
+            <p className="wm-eyebrow">How it works</p>
+            <h2 id="how-heading" className="wm-h2">
+              From idea to live website in five simple steps
+            </h2>
+            <p className="wm-lead">No technical knowledge needed — we guide you through every step.</p>
+          </Reveal>
+          <ol className="wm-journey">
+            {journey.map(([title, text], index) => (
+              <Reveal as="li" key={title} delay={index * 0.06}>
+                <span className="wm-journey-num">{index + 1}</span>
+                <h3>{title}</h3>
+                <p>{text}</p>
+              </Reveal>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section className="wm-section wm-section-alt" aria-labelledby="templates-heading">
+        <div className="wm-container">
+          <Reveal className="wm-section-head">
+            <p className="wm-eyebrow">Templates</p>
+            <h2 id="templates-heading" className="wm-h2">
+              Designs made for local businesses
+            </h2>
+            <p className="wm-lead">Preview a template, then choose the one that fits your business.</p>
+          </Reveal>
+          <div className="wm-template-grid">
+            {templateCatalog.slice(0, 6).map((template) => (
+              <TemplateCard key={template.slug} template={template} />
             ))}
           </div>
-        </section>
-
-        <section className="why">
-          <p className="section-kicker">Why choose us</p>
-          <h2>Why we can become the best cheap website builder for Indian businesses</h2>
-          <div className="cards two-column">
-            {benefits.map((benefit) => (
-              <article className="info-card" key={benefit.title}>
-                <h3>{benefit.title}</h3>
-                <p>{benefit.text}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="pricing" id="pricing">
-          <p className="section-kicker">Price advantage</p>
-          <h2>Simple pricing that stays below premium global builders</h2>
-          <p className="pricing-intro">
-            The strongest positioning is not claiming we are the cheapest
-            software on earth. It is showing that we are one of the cheapest
-            done-for-you options for Indian small businesses.
+          <p style={{ marginTop: 32, textAlign: "center" }}>
+            <a className="wm-btn wm-btn-secondary" href="/templates">
+              View all templates
+            </a>
           </p>
-          <div className="cards pricing-grid">
+        </div>
+      </section>
+
+      <section className="wm-section" aria-labelledby="services-heading">
+        <div className="wm-container">
+          <Reveal className="wm-section-head">
+            <p className="wm-eyebrow">Services</p>
+            <h2 id="services-heading" className="wm-h2">
+              Everything your business needs online
+            </h2>
+          </Reveal>
+          <div className="wm-grid wm-grid-3">
+            {services.map(([icon, title, text, tone], index) => (
+              <Reveal className="wm-card wm-service" key={title} delay={index * 0.05}>
+                <span className={`wm-icon-tile ${tone}`}>
+                  <Icon name={icon} />
+                </span>
+                <h3>{title}</h3>
+                <p>{text}</p>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="wm-section wm-section-alt" aria-labelledby="who-heading">
+        <div className="wm-container">
+          <Reveal className="wm-section-head">
+            <p className="wm-eyebrow">Built for India</p>
+            <h2 id="who-heading" className="wm-h2">
+              Made for the businesses that power local India
+            </h2>
+            <p className="wm-lead">
+              Templates, WhatsApp enquiries and simple pricing designed around how Indian businesses
+              actually get customers.
+            </p>
+          </Reveal>
+          <ul className="wm-business-types">
+            {businessTypes.map((type) => (
+              <li key={type}>{type}</li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section className="wm-section" aria-labelledby="why-heading">
+        <div className="wm-container">
+          <Reveal className="wm-section-head">
+            <p className="wm-eyebrow">Why Appzet Web Solution</p>
+            <h2 id="why-heading" className="wm-h2">
+              Get a professional website without the hassle
+            </h2>
+          </Reveal>
+          <div className="wm-grid wm-grid-4">
+            {benefits.map(([icon, title, text]) => (
+              <div className="wm-feature" key={title}>
+                <span className="wm-icon-tile purple">
+                  <Icon name={icon} />
+                </span>
+                <h3>{title}</h3>
+                <p>{text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="wm-section wm-section-alt" id="pricing" aria-labelledby="pricing-heading">
+        <div className="wm-container">
+          <Reveal className="wm-section-head">
+            <p className="wm-eyebrow">Pricing</p>
+            <h2 id="pricing-heading" className="wm-h2">
+              Simple, affordable monthly pricing
+            </h2>
+            <p className="wm-lead">Start free and upgrade when your business is ready.</p>
+          </Reveal>
+
+          <div className="wm-pricing-grid">
             {pricingPlans.map((plan) => (
-              <article
-                className={`price-card ${plan.featured ? "highlight" : ""}`}
-                key={plan.name}
-              >
-                <span className="plan-tag">{plan.tag}</span>
+              <article className={`wm-card wm-price ${plan.featured ? "featured" : ""}`} key={plan.name}>
+                <span className={`wm-badge ${plan.featured ? "wm-badge-blue" : ""}`}>{plan.tag}</span>
                 <h3>{plan.name}</h3>
-                <h4>
-                  <span className="currency">₹</span>
-                  {plan.price}
-                  <small>/month</small>
-                </h4>
+                <p className="wm-price-amount">
+                  ₹{plan.price}
+                  <small> /month</small>
+                </p>
                 <p>{plan.details}</p>
                 {plan.name === "Free" ? (
-                  <a className="btn btn-primary" href="#/templates">
+                  <a className="wm-btn wm-btn-primary" href="/templates">
                     Start Free
                   </a>
                 ) : (
-                  <a className="btn btn-primary" href={whatsappLink}>
+                  <a className="wm-btn wm-btn-secondary" href={whatsappLink}>
                     Talk on WhatsApp
                   </a>
                 )}
@@ -347,149 +343,71 @@ const Home = () => {
             ))}
           </div>
 
-          <div className="pricing-table-wrap">
-            <table className="pricing-table">
+          <div className="wm-table-wrap" tabIndex={0} role="region" aria-label="Plan comparison table">
+            <table className="wm-compare">
               <thead>
                 <tr>
-                  <th>Feature</th>
-                  <th>Free</th>
-                  <th>₹249 Starter</th>
-                  <th>₹499 Growth</th>
-                  <th>₹999 Business</th>
+                  <th scope="col">Feature</th>
+                  <th scope="col">Free</th>
+                  <th scope="col">₹249 Launch</th>
+                  <th scope="col">₹499 Growth</th>
+                  <th scope="col">₹999 Business</th>
                 </tr>
               </thead>
               <tbody>
                 {pricingTableRows.map((row) => (
                   <tr key={row[0]}>
-                    <td>{row[0]}</td>
-                    <td>{row[1]}</td>
-                    <td>{row[2]}</td>
-                    <td>{row[3]}</td>
-                    <td>{row[4]}</td>
+                    <th scope="row">{row[0]}</th>
+                    {row.slice(1).map((cell, index) => (
+                      <td key={index}>{cell}</td>
+                    ))}
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section className="testimonials">
-          <p className="section-kicker">Value promise</p>
-          <h2>The promise we should keep repeating across the page</h2>
-          <div className="cards three-column">
-            {testimonials.map((quote) => (
-              <article className="testimonial-card" key={quote}>
-                <span className="quote-mark">“</span>
-                <p>{quote}</p>
-              </article>
+      <section className="wm-section" id="faq" aria-labelledby="faq-heading">
+        <div className="wm-container">
+          <Reveal className="wm-section-head">
+            <p className="wm-eyebrow">FAQ</p>
+            <h2 id="faq-heading" className="wm-h2">
+              Common questions
+            </h2>
+          </Reveal>
+          <div className="wm-faq">
+            {faqs.map(([question, answer]) => (
+              <details key={question}>
+                <summary>{question}</summary>
+                <p>{answer}</p>
+              </details>
             ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section className="faq" id="faq">
-          <p className="section-kicker">FAQ</p>
-          <h2>Questions buyers will ask when comparing us with builders</h2>
-          <div className="faq-list">
-            {faqs.map((item) => (
-              <article className="faq-item" key={item.question}>
-                <h4>{item.question}</h4>
-                <p>{item.answer}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="cta">
-          <div className="cta-panel">
-            <div>
-              <p className="section-kicker">Ready to launch?</p>
-              <h2>
-                Position your brand as the affordable Indian alternative to
-                expensive or DIY website builders
-              </h2>
+      <section className="wm-section" style={{ paddingTop: 0 }} aria-labelledby="cta-heading">
+        <div className="wm-container">
+          <div className="wm-cta">
+            <h2 id="cta-heading">Ready to Take Your Business Online?</h2>
+            <p>Tell us about your business and we&apos;ll help you choose the right website.</p>
+            <div className="wm-cta-actions">
+              <a className="wm-btn wm-btn-primary wm-btn-lg" href="/templates">
+                Get Started
+              </a>
+              <a className="wm-btn wm-btn-secondary wm-btn-lg" href="/templates">
+                Explore Templates
+              </a>
             </div>
-            <a className="btn btn-primary" href={whatsappLink}>
-              Talk on WhatsApp
-            </a>
           </div>
-        </section>
-      </main>
+        </div>
+      </section>
+    </main>
 
-      <footer className="home-footer">
-
-  <div className="home-footer-brand">
-    <div className="brand-badge">WM</div>
-    <div>
-      <strong>WebMitra</strong>
-      <p>
-        Affordable websites for Indian local shops, service businesses,
-        clinics, gyms, coaching centres, and showrooms.
-      </p>
-    </div>
+    <SiteFooter />
   </div>
-
-  <div className="home-footer-column">
-    <h3>Explore</h3>
-    <a href="/templates">Templates</a>
-    <a href="#pricing">Pricing</a>
-    <a href="#how-it-works">How it works</a>
-    <a href="#faq">FAQ</a>
-  </div>
-
-  <div className="home-footer-column">
-    <h3>Company</h3>
-    <a href="/about">About</a>
-    <a href="/contact">Contact</a>
-    <a href="/services">Services</a>
-    <a href="/privacy-policy">Privacy Policy</a>
-    <a href="/terms-and-conditions">Terms and Conditions</a>
-    <a href="/login">Google Sign-In</a>
-  </div>
-
-  <div className="home-footer-column">
-    <h3>Contact</h3>
-
-    <a href="tel:+917995590740">📞 +91 7995590740</a>
-
-    <p>
-      📧 
-      <a href="mailto:rksahu4455@gmail.com">
-        rksahu4455@gmail.com
-      </a>
-    </p>
-
-    <p>
-      📍 No.305, Block-B,<br />
-      Deccan Prakruti Apartment,<br />
-      Egattur, Chennai, Tamil Nadu ,600130
-    </p>
-
-    <a className="home-footer-whatsapp" href={whatsappLink}>
-      Talk on WhatsApp
-    </a>
-  </div>
-
-  <div className="home-footer-column">
-    <h3>Trust</h3>
-    <a href="/privacy-policy">Privacy Policy</a>
-    <a href="/terms-and-conditions">Terms and Conditions</a>
-    <a href="/about">About WebMitra</a>
-    <a href="/contact">Official contact</a>
-    <div className="home-social-row">
-      <a href="https://facebook.com" aria-label="Facebook">f</a>
-      <a href="https://instagram.com" aria-label="Instagram">◎</a>
-      <a href="https://twitter.com" aria-label="Twitter">x</a>
-      <a href="https://youtube.com" aria-label="YouTube">▶</a>
-    </div>
-
-    <p className="home-footer-copy">
-      © 2026 WebMitra. Built for local Indian businesses.
-    </p>
-  </div>
-
-</footer>
-    </div>
-  );
-};
+);
 
 export default Home;

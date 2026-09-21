@@ -1,0 +1,835 @@
+/* Appzet Web Solution shared UI primitives. Uses tokens from tokens.css only. */
+
+.wm-container {
+  width: min(var(--wm-container), calc(100% - 32px));
+  margin-inline: auto;
+}
+
+/* ---------- Buttons ---------- */
+.wm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 20px;
+  border: 1px solid transparent;
+  border-radius: var(--wm-radius);
+  font-weight: 600;
+  font-size: var(--wm-text-base);
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.18s var(--wm-ease), border-color 0.18s var(--wm-ease),
+    color 0.18s var(--wm-ease), box-shadow 0.18s var(--wm-ease), transform 0.18s var(--wm-ease);
+}
+
+.wm-btn:focus-visible {
+  outline: none;
+  box-shadow: var(--wm-focus);
+}
+
+.wm-btn:disabled,
+.wm-btn[aria-disabled="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.wm-btn-sm {
+  min-height: 36px;
+  padding: 0 14px;
+  font-size: var(--wm-text-sm);
+}
+
+.wm-btn-lg {
+  min-height: 52px;
+  padding: 0 28px;
+  font-size: var(--wm-text-lg);
+}
+
+.wm-btn-primary {
+  background: var(--wm-primary);
+  color: #fff;
+  box-shadow: var(--wm-shadow-sm);
+}
+
+.wm-btn-primary:hover {
+  background: var(--wm-primary-hover);
+  box-shadow: var(--wm-shadow);
+}
+
+.wm-btn-secondary {
+  background: var(--wm-surface);
+  color: var(--wm-primary-hover);
+  border-color: var(--wm-primary-border);
+}
+
+.wm-btn-secondary:hover {
+  background: var(--wm-primary-light);
+  border-color: var(--wm-primary);
+}
+
+.wm-btn-ghost {
+  background: transparent;
+  color: var(--wm-text-secondary);
+}
+
+.wm-btn-ghost:hover {
+  background: var(--wm-surface-secondary);
+  color: var(--wm-text-primary);
+}
+
+.wm-btn-success {
+  background: var(--wm-success);
+  color: #fff;
+}
+
+.wm-btn-success:hover {
+  background: var(--wm-success-hover);
+}
+
+.wm-btn-danger {
+  background: var(--wm-danger);
+  color: #fff;
+}
+
+.wm-btn-danger:hover {
+  background: var(--wm-danger-hover);
+}
+
+.wm-btn-whatsapp {
+  background: #25d366;
+  color: #062e16;
+}
+
+.wm-btn-whatsapp:hover {
+  background: #1ebe5b;
+}
+
+/* ---------- Cards & badges ---------- */
+.wm-card {
+  padding: 24px;
+  border: 1px solid var(--wm-border);
+  border-radius: var(--wm-radius-lg);
+  background: var(--wm-surface);
+  box-shadow: var(--wm-shadow-sm);
+}
+
+.wm-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border: 1px solid var(--wm-border);
+  border-radius: 999px;
+  background: var(--wm-surface-secondary);
+  color: var(--wm-text-secondary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.wm-badge-blue {
+  background: var(--wm-primary-light);
+  border-color: var(--wm-primary-border);
+  color: var(--wm-primary-hover);
+}
+
+.wm-badge-green {
+  background: var(--wm-success-light);
+  border-color: var(--wm-success-border);
+  color: var(--wm-success-hover);
+}
+
+.wm-badge-purple {
+  background: var(--wm-purple-light);
+  border-color: var(--wm-purple-border);
+  color: var(--wm-purple-hover);
+}
+
+.wm-badge-red {
+  background: var(--wm-danger-light);
+  border-color: var(--wm-danger-border);
+  color: var(--wm-danger-hover);
+}
+
+.wm-eyebrow {
+  display: inline-block;
+  margin: 0 0 12px;
+  color: var(--wm-primary);
+  font-size: var(--wm-text-sm);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ---------- Forms ---------- */
+.wm-field {
+  display: grid;
+  gap: 6px;
+  margin: 0 0 16px;
+}
+
+.wm-field > label,
+.wm-field > .wm-label {
+  color: var(--wm-text-primary);
+  font-size: var(--wm-text-sm);
+  font-weight: 600;
+}
+
+.wm-input,
+.wm-select,
+.wm-textarea {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid var(--wm-border);
+  border-radius: var(--wm-radius);
+  background: var(--wm-surface);
+  color: var(--wm-text-primary);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.wm-textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.wm-input::placeholder,
+.wm-textarea::placeholder {
+  color: var(--wm-text-muted);
+}
+
+.wm-input:focus,
+.wm-select:focus,
+.wm-textarea:focus {
+  outline: none;
+  border-color: var(--wm-primary);
+  box-shadow: var(--wm-focus);
+}
+
+.wm-input:disabled,
+.wm-select:disabled,
+.wm-textarea:disabled {
+  background: var(--wm-surface-secondary);
+  color: var(--wm-text-muted);
+  cursor: not-allowed;
+}
+
+.wm-input[aria-invalid="true"],
+.wm-textarea[aria-invalid="true"] {
+  border-color: var(--wm-danger);
+}
+
+.wm-help {
+  color: var(--wm-text-muted);
+  font-size: var(--wm-text-sm);
+}
+
+.wm-field-error {
+  color: var(--wm-danger);
+  font-size: var(--wm-text-sm);
+  font-weight: 500;
+}
+
+.wm-alert {
+  padding: 12px 16px;
+  border: 1px solid var(--wm-border);
+  border-radius: var(--wm-radius);
+  font-size: var(--wm-text-sm);
+}
+
+.wm-alert-error {
+  background: var(--wm-danger-light);
+  border-color: var(--wm-danger-border);
+  color: var(--wm-danger-hover);
+}
+
+.wm-alert-success {
+  background: var(--wm-success-light);
+  border-color: var(--wm-success-border);
+  color: var(--wm-success-hover);
+}
+
+/* ---------- Skeleton ---------- */
+.wm-skeleton {
+  display: block;
+  border-radius: 8px;
+  background: linear-gradient(90deg, var(--wm-border-light) 25%, var(--wm-border) 50%, var(--wm-border-light) 75%);
+  background-size: 200% 100%;
+  animation: wm-shimmer 1.4s linear infinite;
+}
+
+.wm-skeleton-card {
+  display: grid;
+  gap: 12px;
+}
+
+.wm-skeleton-page {
+  display: grid;
+  gap: 16px;
+  padding: 8px 0;
+}
+
+.wm-skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.wm-skeleton-grid-4 {
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+.wm-skeleton-table {
+  display: grid;
+  gap: 14px;
+  padding: 20px;
+  border: 1px solid var(--wm-border);
+  border-radius: var(--wm-radius-lg);
+}
+
+.wm-skeleton-row {
+  display: flex;
+  gap: 4%;
+}
+
+@keyframes wm-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* ---------- Empty / error states ---------- */
+.wm-empty {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  padding: 48px 24px;
+  border: 1px dashed var(--wm-primary-border);
+  border-radius: var(--wm-radius-lg);
+  background: var(--wm-surface-secondary);
+  text-align: center;
+}
+
+.wm-empty h3 {
+  margin: 0;
+  font-size: var(--wm-h3);
+}
+
+.wm-empty p {
+  max-width: 44ch;
+  margin: 0 0 8px;
+  color: var(--wm-text-secondary);
+}
+
+.wm-empty-icon {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--wm-primary-light);
+  color: var(--wm-primary);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.wm-error-state {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 24px;
+  border: 1px solid var(--wm-danger-border);
+  border-radius: var(--wm-radius-lg);
+  background: var(--wm-danger-light);
+}
+
+.wm-error-state h3 {
+  margin: 0 0 4px;
+  font-size: var(--wm-text-lg);
+  color: var(--wm-danger-hover);
+}
+
+.wm-error-state p {
+  margin: 0 0 12px;
+  color: var(--wm-text-secondary);
+}
+
+.wm-error-compact {
+  padding: 14px 16px;
+}
+
+.wm-error-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--wm-danger);
+  color: #fff;
+  font-weight: 800;
+}
+
+/* ---------- Logo ---------- */
+.wm-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--wm-text-primary);
+}
+
+.wm-mark {
+  position: relative;
+  display: inline-block;
+  flex: none;
+  perspective: 300px;
+}
+
+.wm-mark svg {
+  display: block;
+  overflow: visible;
+  filter: drop-shadow(0 6px 8px rgba(76, 60, 200, 0.35));
+}
+
+.wm-mark-cube {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.wm-mark-shine {
+  opacity: 0;
+}
+
+.wm-mark.is-animated {
+  animation: wm-mark-float 4.5s ease-in-out infinite;
+}
+
+.wm-mark.is-animated .wm-mark-shine {
+  animation: wm-mark-shine 5s ease-in-out 1s infinite;
+}
+
+/* Hover: the cube does a quick 3D turn */
+.wm-logo:hover .wm-mark.is-animated svg,
+.wm-logo:focus-visible .wm-mark.is-animated svg {
+  animation: wm-mark-spin 0.9s var(--wm-ease);
+}
+
+@keyframes wm-mark-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-2.5px);
+  }
+}
+
+@keyframes wm-mark-shine {
+  0%,
+  60% {
+    opacity: 0;
+    transform: skewX(-20deg) translateX(0);
+  }
+
+  70% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: skewX(-20deg) translateX(110px);
+  }
+}
+
+@keyframes wm-mark-spin {
+  from {
+    transform: rotateY(0deg);
+  }
+
+  to {
+    transform: rotateY(360deg);
+  }
+}
+
+.wm-logo-text {
+  display: grid;
+  line-height: 1.15;
+}
+
+.wm-logo-accent {
+  background: var(--wm-gradient-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.wm-logo-inverse .wm-logo-accent {
+  background: linear-gradient(135deg, #93c5fd, #c4b5fd);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.wm-logo-text strong {
+  font-size: 1.05rem;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+@media (max-width: 400px) {
+  .wm-logo-text strong {
+    font-size: 0.95rem;
+  }
+}
+
+.wm-logo-text small {
+  color: var(--wm-text-muted);
+  font-size: 0.75rem;
+}
+
+.wm-logo-inverse {
+  color: #fff;
+}
+
+/* ---------- Header ---------- */
+.wm-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.94);
+  border-bottom: 1px solid var(--wm-border);
+  backdrop-filter: saturate(1.4) blur(10px);
+}
+
+.wm-header-inner {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  width: min(var(--wm-container), calc(100% - 32px));
+  min-height: 68px;
+  margin-inline: auto;
+}
+
+.wm-nav {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  gap: 2px;
+}
+
+@media (max-width: 1100px) {
+  .wm-header-inner {
+    gap: 12px;
+  }
+
+  .wm-nav a {
+    padding: 8px 8px;
+    font-size: 0.9rem;
+  }
+}
+
+.wm-nav a {
+  padding: 8px 12px;
+  border-radius: var(--wm-radius-sm);
+  color: var(--wm-text-secondary);
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: color 0.15s, background-color 0.15s;
+}
+
+.wm-nav a:hover {
+  background: var(--wm-primary-light);
+  color: var(--wm-primary-hover);
+}
+
+.wm-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.wm-account {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 180px;
+  padding: 4px 12px 4px 4px;
+  border: 1px solid var(--wm-border);
+  border-radius: 999px;
+  font-size: var(--wm-text-sm);
+  font-weight: 600;
+}
+
+.wm-account img {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+}
+
+.wm-account span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wm-menu-toggle {
+  display: none;
+  margin-left: auto;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--wm-border);
+  border-radius: var(--wm-radius);
+  background: var(--wm-surface);
+  color: var(--wm-text-primary);
+  font-size: 1.25rem;
+}
+
+.wm-mobile-menu {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .wm-nav,
+  .wm-header-actions {
+    display: none;
+  }
+
+  .wm-menu-toggle {
+    display: block;
+  }
+
+  .wm-mobile-menu {
+    display: grid;
+    gap: 4px;
+    max-height: 0;
+    overflow: hidden;
+    padding: 0 16px;
+    background: var(--wm-surface);
+    transition: max-height 0.25s var(--wm-ease), padding 0.25s var(--wm-ease);
+  }
+
+  .wm-mobile-menu.open {
+    max-height: 480px;
+    padding: 8px 16px 20px;
+    border-top: 1px solid var(--wm-border);
+  }
+
+  .wm-mobile-menu a:not(.wm-btn) {
+    padding: 12px 8px;
+    border-radius: var(--wm-radius-sm);
+    color: var(--wm-text-primary);
+    font-weight: 500;
+  }
+
+  .wm-mobile-menu a:not(.wm-btn):hover {
+    background: var(--wm-primary-light);
+  }
+}
+
+/* ---------- Footer ---------- */
+.wm-footer {
+  padding: 56px 0 0;
+  background: var(--wm-navy);
+  color: #cbd5e1;
+}
+
+.wm-footer-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1.4fr;
+  gap: 32px;
+}
+
+.wm-footer h2 {
+  margin: 0 0 14px;
+  color: #fff;
+  font-size: var(--wm-text-base);
+  letter-spacing: 0;
+}
+
+.wm-footer nav,
+.wm-footer address {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  font-style: normal;
+}
+
+.wm-footer a:not(.wm-btn) {
+  color: #cbd5e1;
+  font-size: 0.95rem;
+}
+
+.wm-footer a:not(.wm-btn):hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.wm-footer p {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.wm-footer-brand {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: 16px;
+}
+
+.wm-footer-bottom {
+  margin-top: 40px;
+  padding: 20px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  color: #94a3b8;
+}
+
+@media (max-width: 900px) {
+  .wm-footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .wm-footer-brand {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 480px) {
+  .wm-footer-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- Progress / timeline (shared by tracking + dashboards) ---------- */
+.wm-progress {
+  height: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--wm-border-light);
+}
+
+.wm-progress > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--wm-primary);
+  transition: width 0.5s var(--wm-ease);
+}
+
+.wm-progress.is-complete > span {
+  background: var(--wm-success);
+}
+
+.wm-steps {
+  display: grid;
+  gap: 0;
+  margin: 20px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wm-step {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 0;
+  color: var(--wm-text-muted);
+  font-weight: 500;
+}
+
+.wm-step::before {
+  content: "";
+  position: absolute;
+  left: 13px;
+  top: -12px;
+  bottom: 50%;
+  width: 2px;
+  background: var(--wm-border);
+}
+
+.wm-step:first-child::before {
+  display: none;
+}
+
+.wm-step-dot {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--wm-border);
+  border-radius: 50%;
+  background: var(--wm-surface);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.wm-step.is-complete {
+  color: var(--wm-text-primary);
+}
+
+.wm-step.is-complete::before {
+  background: var(--wm-success);
+}
+
+.wm-step.is-complete .wm-step-dot {
+  border-color: var(--wm-success);
+  background: var(--wm-success);
+  color: #fff;
+}
+
+.wm-step.is-current {
+  color: var(--wm-primary-hover);
+  font-weight: 700;
+}
+
+.wm-step.is-current::before {
+  background: var(--wm-success);
+}
+
+.wm-step.is-current .wm-step-dot {
+  border-color: var(--wm-primary);
+  background: var(--wm-primary);
+  color: #fff;
+  box-shadow: 0 0 0 4px var(--wm-primary-light);
+}
+
+.wm-step.is-problem {
+  color: var(--wm-danger-hover);
+  font-weight: 700;
+}
+
+.wm-step.is-problem .wm-step-dot {
+  border-color: var(--wm-danger);
+  background: var(--wm-danger);
+  color: #fff;
+}
+
+/* Scrollable tables everywhere */
+.wm-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--wm-border);
+  border-radius: var(--wm-radius);
+}
+
+/* Reduced motion: keep only the short, user-triggered hover turn of the logo.
+   The continuous float and light sweep stay disabled (see index.css). */
+@media (prefers-reduced-motion: reduce) {
+  .wm-logo:hover .wm-mark.is-animated svg,
+  .wm-logo:focus-visible .wm-mark.is-animated svg {
+    animation-duration: 0.9s !important;
+    animation-iteration-count: 1 !important;
+  }
+}
