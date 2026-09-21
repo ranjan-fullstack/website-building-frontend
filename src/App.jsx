@@ -93,7 +93,7 @@ const updateMeta = (route, parts) => {
           path: `/templates/${templateSlug}`,
         }
       : routeMeta[canonicalRoute] || routeMeta[""];
-  const canonicalUrl = `https://webmitra.online${meta.path}`;
+  const canonicalUrl = `https://webdev.appzets.com${meta.path}`;
   const robotsTag = document.querySelector('meta[name="robots"]');
   const descriptionTag = document.querySelector('meta[name="description"]');
   const canonicalTag = document.querySelector('link[rel="canonical"]');
