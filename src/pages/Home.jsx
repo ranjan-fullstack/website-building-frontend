@@ -5,7 +5,6 @@ import Reveal from "../components/ui/Reveal";
 import SiteFooter from "../components/ui/SiteFooter";
 import SiteHeader from "../components/ui/SiteHeader";
 import TemplateCard from "../components/ui/TemplateCard";
-import { whatsappLink } from "../data/site";
 import { templateCatalog } from "../data/templateCatalog";
 
 const trustPoints = [
@@ -52,19 +51,6 @@ const benefits = [
   ["users", "Done-for-you setup", "No coding and no technical tools to manage yourself."],
   ["chat", "Built for real enquiries", "Enquiry forms and WhatsApp buttons turn visitors into conversations."],
   ["refresh", "Easy updates", "Need a change later? We help you keep your website fresh."],
-];
-
-const pricingPlans = [
-  { name: "Free", price: "0", details: "3 pages • Subdomain • Appzet Web Solution branding visible", tag: "Start free" },
-  { name: "Launch", price: "249", details: "5 pages • Mobile-ready • WhatsApp", tag: "For new businesses" },
-  {
-    name: "Growth",
-    price: "499",
-    details: "15 pages • Blog • Priority support",
-    tag: "Best value for local businesses",
-    featured: true,
-  },
-  { name: "Business", price: "999", details: "Advanced features • Faster revisions", tag: "For growing brands" },
 ];
 
 const faqs = [
@@ -291,39 +277,6 @@ const Home = () => (
         </div>
       </section>
 
-      <section className="wm-section wm-section-alt" id="pricing" aria-labelledby="pricing-heading">
-        <div className="wm-container">
-          <Reveal className="wm-section-head">
-            <p className="wm-eyebrow">Pricing</p>
-            <h2 id="pricing-heading" className="wm-h2">
-              Simple, affordable monthly pricing
-            </h2>
-            <p className="wm-lead">Start free and upgrade when your business is ready.</p>
-          </Reveal>
-
-          <div className="wm-pricing-grid">
-            {pricingPlans.map((plan) => (
-              <article className={`wm-card wm-price ${plan.featured ? "featured" : ""}`} key={plan.name}>
-                <span className={`wm-badge ${plan.featured ? "wm-badge-blue" : ""}`}>{plan.tag}</span>
-                <h3>{plan.name}</h3>
-                <p className="wm-price-amount">
-                  ₹{plan.price}
-                  <small> /month</small>
-                </p>
-                <p>{plan.details}</p>
-                {plan.name === "Free" ? (
-                  <a className="wm-btn wm-btn-primary" href="/templates">
-                    Start Free
-                  </a>
-                ) : (
-                  <a className="wm-btn wm-btn-secondary" href={whatsappLink}>
-                    Talk on WhatsApp
-                  </a>
-                )}
-              </article>
-            ))}
-          </div>
-        </div>
       </section>
 
       <section className="wm-section" id="faq" aria-labelledby="faq-heading">
