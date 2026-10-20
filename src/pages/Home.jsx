@@ -277,8 +277,6 @@ const Home = () => (
         </div>
       </section>
 
-      </section>
-
       <section className="wm-section" id="faq" aria-labelledby="faq-heading">
         <div className="wm-container">
           <Reveal className="wm-section-head">
