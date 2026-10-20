@@ -67,25 +67,6 @@ const pricingPlans = [
   { name: "Business", price: "999", details: "Advanced features • Faster revisions", tag: "For growing brands" },
 ];
 
-const pricingTableRows = [
-  ["Basic website builder", "Yes", "Yes", "Yes", "Yes"],
-  ["Mobile-ready site", "Yes", "Yes", "Yes", "Yes"],
-  ["Basic templates", "Yes", "Yes", "Yes", "Yes"],
-  ["Subdomain", "Yes", "Yes", "Yes", "Yes"],
-  ["Your branding visible", "Yes", "No", "No", "No"],
-  ["Custom domain", "No", "No", "Yes", "Yes"],
-  ["Number of pages", "3", "5", "15", "25 or more"],
-  ["WhatsApp button", "Yes", "Yes", "Yes", "Yes"],
-  ["Contact form", "Yes", "Yes", "Yes", "Yes"],
-  ["SEO basics", "No or limited", "Yes", "Yes", "Yes"],
-  ["Testimonials / gallery", "No", "Basic", "Full", "Full"],
-  ["Blog / updates", "No", "No", "Yes", "Yes"],
-  ["Premium templates", "No", "Limited", "Yes", "Yes"],
-  ["Faster support", "No", "Basic", "Faster", "Priority"],
-  ["Analytics help", "No", "No", "Basic", "Advanced"],
-  ["Custom sections / edits", "No", "Limited", "More", "Best access"],
-];
-
 const faqs = [
   [
     "Do I need technical knowledge?",
@@ -341,30 +322,6 @@ const Home = () => (
                 )}
               </article>
             ))}
-          </div>
-
-          <div className="wm-table-wrap" tabIndex={0} role="region" aria-label="Plan comparison table">
-            <table className="wm-compare">
-              <thead>
-                <tr>
-                  <th scope="col">Feature</th>
-                  <th scope="col">Free</th>
-                  <th scope="col">₹249 Launch</th>
-                  <th scope="col">₹499 Growth</th>
-                  <th scope="col">₹999 Business</th>
-                </tr>
-              </thead>
-              <tbody>
-                {pricingTableRows.map((row) => (
-                  <tr key={row[0]}>
-                    <th scope="row">{row[0]}</th>
-                    {row.slice(1).map((cell, index) => (
-                      <td key={index}>{cell}</td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
           </div>
         </div>
       </section>
